@@ -1,0 +1,229 @@
+.admin-dashboard {
+    min-height: calc(100vh - 80px);
+
+    padding: 60px 50px;
+
+    background: #f5f5f7;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Header */
+
+.admin-dashboard h1 {
+    margin: 0 0 10px;
+
+    color: #1d1d1f;
+
+    font-size: 40px;
+    font-weight: 700;
+
+    letter-spacing: -1px;
+
+    text-align: center;
+}
+
+.admin-dashboard > p {
+    margin: 0 0 50px;
+
+    color: #6e6e73;
+
+    font-size: 17px;
+
+    text-align: center;
+}
+
+
+/* Admin Cards */
+
+.admin-grid {
+    width: 100%;
+    max-width: 900px;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 24px;
+
+    margin: 0 auto;
+}
+
+
+/* Card */
+
+.admin-card {
+    min-height: 190px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    padding: 28px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.05);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.admin-card:hover:not(:disabled) {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.09);
+}
+
+
+.admin-card:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.55;
+}
+
+
+/* Icon */
+
+.admin-card-icon {
+    margin-bottom: 22px;
+
+    font-size: 32px;
+}
+
+
+/* Title */
+
+.admin-card-title {
+    margin-bottom: 8px;
+
+    color: #1d1d1f;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+/* Description */
+
+.admin-card-description {
+    color: #6e6e73;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+}
+
+
+/* Responsive */
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1024px) {
+
+    .admin-dashboard {
+        padding: 50px 30px;
+    }
+
+    .admin-grid {
+        max-width: 760px;
+        gap: 20px;
+    }
+
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 768px) {
+
+    .admin-dashboard {
+        min-height: calc(100vh - 80px);
+
+        padding: 40px 20px;
+    }
+
+    .admin-dashboard h1 {
+        font-size: 32px;
+    }
+
+    .admin-dashboard > p {
+        margin-bottom: 35px;
+
+        font-size: 16px;
+    }
+
+    .admin-grid {
+        width: 100%;
+
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+    .admin-card {
+        min-height: 170px;
+
+        padding: 24px;
+    }
+
+}
+
+
+/* ---------- Small Phones ---------- */
+
+@media (max-width: 480px) {
+
+    .admin-dashboard {
+        padding: 35px 16px;
+    }
+
+    .admin-dashboard h1 {
+        font-size: 28px;
+        letter-spacing: -0.5px;
+    }
+
+    .admin-dashboard > p {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .admin-grid {
+        gap: 16px;
+    }
+
+    .admin-card {
+        min-height: 155px;
+
+        padding: 22px;
+    }
+
+    .admin-card-icon {
+        margin-bottom: 16px;
+
+        font-size: 28px;
+    }
+
+    .admin-card-title {
+        font-size: 18px;
+    }
+
+    .admin-card-description {
+        font-size: 14px;
+    }
+
+}

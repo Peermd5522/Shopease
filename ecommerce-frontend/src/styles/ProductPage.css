@@ -1,0 +1,295 @@
+/* Product */
+
+.product-page{
+    max-width:1400px;
+    margin:50px auto;
+    padding:0 50px;
+}
+
+/* Back Button */
+
+.back-button{
+    border:none;
+    background:none;
+    color:var(--text-secondary);
+    font-size:16px;
+    cursor:pointer;
+    margin-bottom:40px;
+    transition:color .3s ease;
+}
+
+.back-button:hover{
+    color:var(--text);
+}
+
+/* Product Layout */
+
+.product-details{
+    display:grid;
+    grid-template-columns:450px 1fr;
+    gap:80px;
+    align-items:center;
+}
+
+/* Product Gallery */
+
+.product-gallery{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.product-image{
+    width:100%;
+    height:500px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:var(--card);
+    border-radius:32px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease,
+        background .3s ease;
+}
+
+.product-image img{
+    width:85%;
+    height:85%;
+    object-fit:contain;
+    transition:transform .45s ease;
+}
+
+.product-image:hover{
+    transform:translateY(-6px);
+    box-shadow:
+        0 25px 55px rgba(0,0,0,.12);
+}
+
+.product-image:hover img{
+    transform:scale(1.08);
+}
+
+/* Thumbnail */
+
+
+
+/* Product Info */
+
+.product-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.brand{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text-secondary);
+    margin-bottom:10px;
+}
+
+.product-info h1{
+    font-size:40px;
+    line-height:1.2;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:20px;
+    transition:color .3s ease;
+}
+
+/* Price */
+
+.price-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:18px;
+}
+
+.price{
+    font-size:42px;
+    font-weight:700;
+    color:var(--text);
+}
+
+.discount{
+    padding:6px 12px;
+    border-radius:999px;
+    background:#e8f7ec;
+    color:#2d9c57;
+    font-size:14px;
+    font-weight:600;
+}
+
+/* Details */
+
+.stock{
+    color:#2d9c57;
+    font-weight:600;
+    margin-bottom:12px;
+}
+
+.rating{
+    font-size:16px;
+    color:var(--text-secondary);
+    margin-bottom:16px;
+}
+
+.rating-text{
+    color:var(--text-secondary);
+}
+
+.delivery,
+.returns{
+    font-size:15px;
+    color:var(--text-secondary);
+    margin-bottom:8px;
+}
+
+/* Description */
+
+.description{
+    max-width:560px;
+    font-size:17px;
+    line-height:1.8;
+    color:var(--text-secondary);
+    margin:28px 0;
+}
+
+.category{
+    color:var(--text-secondary);
+    margin-bottom:35px;
+    font-size:16px;
+}
+
+.category strong{
+    color:var(--text);
+}
+
+/* Button */
+
+.product-info .add-button{
+    width:200px;
+    height:56px;
+    border:none;
+    border-radius:999px;
+    background:var(--primary);
+    color:#fff;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+}
+
+.product-info .add-button:hover{
+    background:#0066cc;
+    transform:translateY(-3px);
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.18);
+}
+
+.product-info .add-button:active{
+    transform:scale(.96);
+}
+
+/* Related Products */
+
+.related-section{
+    margin-top:100px;
+}
+
+.related-section h2{
+    font-size:32px;
+    color:var(--text);
+    margin-bottom:40px;
+}
+
+/* Tablet */
+
+@media (max-width:1024px){
+
+.product-page{
+    padding:0 30px;
+}
+
+.product-details{
+    gap:50px;
+}
+
+.product-info h1{
+    font-size:34px;
+}
+
+.price{
+    font-size:36px;
+}
+
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+.product-page{
+    padding:0 20px;
+}
+
+.back-button{
+    margin-bottom:25px;
+}
+
+.product-details{
+    display:flex;
+    flex-direction:column;
+    gap:40px;
+}
+
+.product-gallery,
+.product-info{
+    width:100%;
+}
+
+.product-image{
+    height:320px;
+}
+
+.thumbnail{
+    width:60px;
+    height:60px;
+}
+
+.product-info h1{
+    font-size:30px;
+}
+
+.price{
+    font-size:32px;
+}
+
+.price-row{
+    flex-wrap:wrap;
+}
+
+.description{
+    font-size:16px;
+}
+
+.product-info .add-button{
+    width:100%;
+}
+
+.related-section{
+    margin-top:70px;
+}
+
+.related-section h2{
+    font-size:26px;
+}
+
+}

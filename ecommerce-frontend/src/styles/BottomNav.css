@@ -1,0 +1,1591 @@
+/* =========================================================
+   APPLE / LIQUID GLASS BOTTOM NAVIGATION
+   ========================================================= */
+
+.bottom-nav {
+
+    --nav-padding: 7px;
+
+    position: fixed;
+
+    left: 50%;
+    bottom: 22px;
+
+    transform: translateX(-50%);
+
+    width: min(560px, calc(100% - 32px));
+    height: 76px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    align-items: center;
+
+    padding: var(--nav-padding);
+
+    /*
+       The navigation itself is intentionally subtle.
+
+       Apple Liquid Glass is not a white frosted rectangle.
+       The underlying content should remain visible.
+    */
+
+    background:
+        rgba(255, 255, 255, 0.34);
+
+    backdrop-filter:
+        blur(28px)
+        saturate(180%);
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(180%);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.48);
+
+    border-radius:
+        999px;
+
+    box-shadow:
+
+        0 10px 35px
+        rgba(0, 0, 0, 0.09),
+
+        0 2px 8px
+        rgba(0, 0, 0, 0.04),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.68);
+
+    z-index: 2000;
+
+    isolation: isolate;
+}
+
+
+/* =========================================================
+   DARK NAVIGATION
+   ========================================================= */
+
+.dark .bottom-nav {
+
+    background:
+        rgba(25, 25, 28, 0.42);
+
+    border-color:
+        rgba(255, 255, 255, 0.11);
+
+    box-shadow:
+
+        0 12px 40px
+        rgba(0, 0, 0, 0.40),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   NAVIGATION ITEMS
+   ========================================================= */
+
+.bottom-nav-item {
+
+    position: relative;
+
+    width: 100%;
+    height: 62px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color:
+        var(--color-text-secondary);
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    z-index: 2;
+
+    transition:
+
+        color
+        0.22s
+        ease,
+
+        transform
+        0.28s
+        cubic-bezier(.22, 1, .36, 1);
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.bottom-nav-item svg {
+
+    width: 24px;
+    height: 24px;
+
+    stroke-width: 2;
+
+    color: currentColor;
+
+    transition:
+
+        color
+        0.22s
+        ease,
+
+        transform
+        0.30s
+        cubic-bezier(.22, 1, .36, 1);
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.bottom-nav-item span {
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    line-height: 1;
+
+    color: currentColor;
+
+    transition:
+        color 0.22s ease;
+}
+
+
+/* =========================================================
+   ACTIVE
+   ========================================================= */
+
+.bottom-nav-item.active {
+
+    color:
+        #007aff;
+
+}
+
+
+.bottom-nav-item.active svg {
+
+    color:
+        #007aff;
+
+}
+
+
+.bottom-nav-item.active span {
+
+    color:
+        #007aff;
+
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.bottom-nav-item:hover {
+
+    color:
+        #007aff;
+
+}
+
+
+.bottom-nav-item:hover svg {
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   LIQUID GLASS INDICATOR
+   ========================================================= */
+
+.bottom-nav-indicator {
+
+    --drag-x: 0px;
+
+    position: absolute;
+
+    top: 7px;
+    left: 7px;
+
+    width:
+        calc((100% - 14px) / 5);
+
+    height: 62px;
+
+    border-radius:
+        999px;
+
+    /*
+       CLEAR LIQUID GLASS
+
+       Very little white pigment.
+       Most of the appearance comes from blur,
+       saturation and the content underneath.
+    */
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.22),
+            rgba(255, 255, 255, 0.075)
+        );
+
+    backdrop-filter:
+
+        blur(18px)
+        saturate(210%);
+
+    -webkit-backdrop-filter:
+
+        blur(18px)
+        saturate(210%);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.42);
+
+    /*
+       Very soft floating shadow.
+    */
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.70),
+
+        inset 0 -1px 0
+        rgba(255, 255, 255, 0.10),
+
+        0 4px 16px
+        rgba(0, 0, 0, 0.065),
+
+        0 0 18px
+        rgba(255, 255, 255, 0.12);
+
+    z-index: 4;
+
+    cursor: grab;
+
+    pointer-events: auto;
+
+    touch-action: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    will-change:
+        transform,
+        width,
+        height;
+
+    /*
+       Normal state.
+
+       The CSS selectors below replace this transform
+       according to the selected tab.
+    */
+
+    transition:
+
+        transform
+        0.48s
+        cubic-bezier(.22, 1.2, .36, 1),
+
+        top
+        0.25s
+        cubic-bezier(.22, 1, .36, 1),
+
+        height
+        0.25s
+        cubic-bezier(.22, 1, .36, 1),
+
+        width
+        0.25s
+        cubic-bezier(.22, 1, .36, 1),
+
+        box-shadow
+        0.25s
+        ease;
+}
+
+
+/* =========================================================
+   GLASS POSITION
+   ========================================================= */
+
+.bottom-nav[data-active="offer"]
+.bottom-nav-indicator {
+
+    transform:
+        translateX(0);
+
+}
+
+
+.bottom-nav[data-active="categories"]
+.bottom-nav-indicator {
+
+    transform:
+        translateX(100%);
+
+}
+
+
+.bottom-nav[data-active="home"]
+.bottom-nav-indicator {
+
+    transform:
+        translateX(200%);
+
+}
+
+
+.bottom-nav[data-active="search"]
+.bottom-nav-indicator {
+
+    transform:
+        translateX(300%);
+
+}
+
+
+.bottom-nav[data-active="more"]
+.bottom-nav-indicator {
+
+    transform:
+        translateX(400%);
+
+}
+
+
+/* =========================================================
+   DRAGGING
+   ========================================================= */
+
+.bottom-nav.nav-dragging
+.bottom-nav-indicator {
+
+    /*
+       During dragging we use the temporary X
+       generated by JavaScript.
+    */
+
+    transform:
+        translateX(var(--drag-x))
+        scale(1.08, 1.045);
+
+    /*
+       Slightly taller while interacting.
+
+       This creates the "lifting off the surface"
+       effect.
+    */
+
+    top: 4px;
+
+    height: 68px;
+
+    /*
+       Slightly more visible during interaction,
+       but still transparent.
+    */
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.28),
+            rgba(255, 255, 255, 0.085)
+        );
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.84),
+
+        inset 0 -1px 0
+        rgba(255, 255, 255, 0.12),
+
+        0 8px 26px
+        rgba(0, 0, 0, 0.10),
+
+        0 0 24px
+        rgba(255, 255, 255, 0.18);
+
+    cursor: grabbing;
+
+    transition:
+
+        top
+        0.18s
+        ease,
+
+        height
+        0.18s
+        ease,
+
+        box-shadow
+        0.18s
+        ease,
+
+        background
+        0.18s
+        ease;
+
+}
+
+
+/* =========================================================
+   TOP SPECULAR HIGHLIGHT
+   ========================================================= */
+
+.bottom-nav-indicator::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 1px;
+    left: 8%;
+
+    width: 84%;
+    height: 43%;
+
+    border-radius:
+        999px;
+
+    background:
+
+        linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.32),
+            rgba(255, 255, 255, 0.025)
+        );
+
+    opacity: 0.72;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   GLASS REFLECTION
+   ========================================================= */
+
+.bottom-nav-indicator::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius:
+        inherit;
+
+    background:
+
+        linear-gradient(
+            115deg,
+            rgba(255, 255, 255, 0.13),
+            transparent 32%,
+            transparent 67%,
+            rgba(255, 255, 255, 0.035)
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   SEARCH BAR
+   ========================================================= */
+
+.bottom-search-bar {
+
+    position: fixed;
+
+    left: 50%;
+    bottom: 22px;
+
+    transform:
+        translateX(-50%)
+        scaleX(0.35);
+
+    transform-origin:
+        center;
+
+    width:
+        min(560px, calc(100% - 32px));
+
+    height: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding:
+        0 20px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    background:
+        rgba(255, 255, 255, 0.48);
+
+    backdrop-filter:
+        blur(28px)
+        saturate(180%);
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(180%);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.52);
+
+    border-radius:
+        999px;
+
+    box-shadow:
+
+        0 12px 40px
+        rgba(0, 0, 0, 0.10),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.72);
+
+    z-index: 2100;
+
+    transition:
+
+        transform
+        0.52s
+        cubic-bezier(.22, 1.2, .36, 1),
+
+        opacity
+        0.22s
+        ease;
+}
+
+
+.bottom-search-open {
+
+    transform:
+        translateX(-50%)
+        scaleX(1);
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   SEARCH ICON
+   ========================================================= */
+
+.bottom-search-bar > svg {
+
+    flex-shrink: 0;
+
+    color:
+        var(--color-text-secondary);
+}
+
+
+/* =========================================================
+   SEARCH INPUT
+   ========================================================= */
+
+.bottom-search-bar input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    border: none;
+    outline: none;
+
+    background:
+        transparent;
+
+    color:
+        var(--color-text);
+
+    font-family: inherit;
+
+    font-size: 16px;
+}
+
+
+.bottom-search-bar input::placeholder {
+
+    color:
+        var(--color-text-secondary);
+}
+
+
+/* =========================================================
+   SEARCH CLOSE
+   ========================================================= */
+
+.bottom-search-close {
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(0, 0, 0, 0.055);
+
+    color:
+        var(--color-text);
+
+    cursor: pointer;
+
+    transition:
+
+        transform
+        0.25s
+        ease,
+
+        background
+        0.25s
+        ease;
+}
+
+
+.bottom-search-close:hover {
+
+    transform:
+        scale(1.08);
+
+    background:
+        rgba(0, 0, 0, 0.09);
+}
+
+
+/* =========================================================
+   CATEGORY PANEL
+   ========================================================= */
+
+.bottom-category-panel {
+
+    position: fixed;
+
+    left: 50%;
+    bottom: 108px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px)
+        scale(0.96);
+
+    width:
+        min(560px, calc(100% - 32px));
+
+    padding:
+        22px;
+
+    background:
+        rgba(255, 255, 255, 0.52);
+
+    backdrop-filter:
+        blur(30px)
+        saturate(180%);
+
+    -webkit-backdrop-filter:
+        blur(30px)
+        saturate(180%);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.56);
+
+    border-radius:
+        38px;
+
+    box-shadow:
+
+        0 18px 50px
+        rgba(0, 0, 0, 0.12),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.72);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    z-index: 1900;
+
+    transition:
+
+        transform
+        0.45s
+        cubic-bezier(.22, 1.2, .36, 1),
+
+        opacity
+        0.24s
+        ease;
+}
+
+
+.category-panel-open {
+
+    transform:
+        translateX(-50%)
+        translateY(0)
+        scale(1);
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   CATEGORY HEADER
+   ========================================================= */
+
+.bottom-category-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom:
+        18px;
+}
+
+
+.bottom-category-header h3 {
+
+    margin:
+        0 0 3px;
+
+    font-size:
+        20px;
+}
+
+
+.bottom-category-header p {
+
+    margin:
+        0;
+
+    font-size:
+        13px;
+
+    color:
+        var(--color-text-secondary);
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
+
+.bottom-panel-close {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(0, 0, 0, 0.055);
+
+    color:
+        var(--color-text);
+
+    cursor: pointer;
+
+    transition:
+
+        transform
+        0.25s
+        ease,
+
+        background
+        0.25s
+        ease;
+}
+
+
+.bottom-panel-close:hover {
+
+    transform:
+        scale(1.08);
+
+    background:
+        rgba(0, 0, 0, 0.09);
+}
+
+
+/* =========================================================
+   CATEGORY LIST
+   ========================================================= */
+
+.bottom-category-list {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap:
+        9px;
+}
+
+
+.bottom-category-list button {
+
+    padding:
+        9px 14px;
+
+    border: none;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(0, 0, 0, 0.045);
+
+    color:
+        var(--color-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    cursor:
+        pointer;
+
+    transition:
+
+        background
+        0.25s
+        ease,
+
+        transform
+        0.25s
+        ease;
+}
+
+
+.bottom-category-list button:hover {
+
+    transform:
+        translateY(-1px);
+}
+
+
+.bottom-category-list button.active {
+
+    background:
+        var(--color-text);
+
+    color:
+        white;
+}
+
+
+/* =========================================================
+   MORE PANEL
+   ========================================================= */
+
+.bottom-more-panel {
+
+    position: fixed;
+
+    left: 50%;
+    bottom: 22px;
+
+    transform:
+        translateX(-50%)
+        scaleX(0.25);
+
+    transform-origin:
+        center;
+
+    width:
+        min(560px, calc(100% - 32px));
+
+    height:
+        76px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap:
+        12px;
+
+    padding:
+        7px;
+
+    background:
+        rgba(255, 255, 255, 0.50);
+
+    backdrop-filter:
+        blur(30px)
+        saturate(180%);
+
+    -webkit-backdrop-filter:
+        blur(30px)
+        saturate(180%);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.55);
+
+    border-radius:
+        999px;
+
+    box-shadow:
+
+        0 12px 40px
+        rgba(0, 0, 0, 0.10),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.72);
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    z-index:
+        2100;
+
+    transition:
+
+        transform
+        0.52s
+        cubic-bezier(.22, 1.2, .36, 1),
+
+        opacity
+        0.22s
+        ease;
+}
+
+
+.more-panel-open {
+
+    transform:
+        translateX(-50%)
+        scaleX(1);
+
+    opacity:
+        1;
+
+    pointer-events:
+        auto;
+}
+
+
+/* =========================================================
+   MORE BUTTONS
+   ========================================================= */
+
+.bottom-more-panel button {
+
+    flex:
+        1;
+
+    height:
+        62px;
+
+    max-width:
+        180px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        4px;
+
+    border:
+        none;
+
+    border-radius:
+        999px;
+
+    background:
+        transparent;
+
+    color:
+        var(--color-text);
+
+    font-family:
+        inherit;
+
+    cursor:
+        pointer;
+
+    transition:
+
+        background
+        0.25s
+        ease,
+
+        transform
+        0.30s
+        ease;
+}
+
+
+.bottom-more-panel button:hover {
+
+    background:
+        rgba(0, 0, 0, 0.045);
+
+    transform:
+        translateY(-2px);
+}
+
+
+.bottom-more-panel button svg {
+
+    width:
+        24px;
+
+    height:
+        24px;
+}
+
+
+.bottom-more-panel span {
+
+    font-size:
+        11px;
+
+    font-weight:
+        500;
+
+    line-height:
+        1;
+}
+
+
+/* =========================================================
+   DARK MODE — GLASS
+   ========================================================= */
+
+.dark .bottom-nav-indicator {
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.14),
+            rgba(255, 255, 255, 0.035)
+        );
+
+    border-color:
+        rgba(255, 255, 255, 0.15);
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.24),
+
+        inset 0 -1px 0
+        rgba(255, 255, 255, 0.04),
+
+        0 6px 22px
+        rgba(0, 0, 0, 0.28);
+}
+
+
+.dark .bottom-nav.nav-dragging
+.bottom-nav-indicator {
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.20),
+            rgba(255, 255, 255, 0.055)
+        );
+}
+
+
+/* =========================================================
+   DARK SEARCH
+   ========================================================= */
+
+.dark .bottom-search-bar {
+
+    background:
+        rgba(25, 25, 28, 0.52);
+
+    border-color:
+        rgba(255, 255, 255, 0.11);
+
+    box-shadow:
+
+        0 12px 40px
+        rgba(0, 0, 0, 0.38),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   DARK CATEGORY
+   ========================================================= */
+
+.dark .bottom-category-panel {
+
+    background:
+        rgba(25, 25, 28, 0.54);
+
+    border-color:
+        rgba(255, 255, 255, 0.11);
+}
+
+
+.dark .bottom-category-list button {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+}
+
+
+.dark .bottom-category-list button.active {
+
+    background:
+        white;
+
+    color:
+        #1d1d1f;
+}
+
+
+/* =========================================================
+   DARK MORE
+   ========================================================= */
+
+.dark .bottom-more-panel {
+
+    background:
+        rgba(25, 25, 28, 0.53);
+
+    border-color:
+        rgba(255, 255, 255, 0.11);
+
+    box-shadow:
+
+        0 12px 40px
+        rgba(0, 0, 0, 0.38);
+}
+
+
+.dark .bottom-more-panel button:hover {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .bottom-nav {
+
+        position: fixed;
+
+        left: 50%;
+        bottom: 16px;
+
+        transform: translateX(-50%);
+
+        width: calc(100% - 24px);
+
+        height: 72px;
+
+        padding: 7px;
+
+        display: grid;
+
+        grid-template-columns: repeat(5, 1fr);
+
+        align-items: center;
+
+        border-radius: 28px;
+
+        z-index: 9999;
+
+        visibility: visible;
+        opacity: 1;
+
+    }
+
+
+    .bottom-nav-item {
+
+        width: 100%;
+        height: 58px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 4px;
+
+    }
+
+
+    .bottom-nav-item svg {
+
+        width: 23px;
+        height: 23px;
+
+    }
+
+
+    .bottom-nav-item span {
+
+        font-size: 10px;
+
+    }
+
+
+    /* =====================================================
+       TABLET GLASS
+       ===================================================== */
+
+    .bottom-nav-indicator {
+
+        top: 7px;
+        left: 7px;
+
+        width: calc((100% - 14px) / 5);
+
+        height: 58px;
+
+        border-radius: 22px;
+
+    }
+
+
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    .bottom-search-bar {
+
+        left: 50%;
+        bottom: 16px;
+
+        width: calc(100% - 24px);
+
+        height: 72px;
+
+        border-radius: 28px;
+
+        z-index: 10000;
+
+    }
+
+
+    /* =====================================================
+       CATEGORY PANEL
+       ===================================================== */
+
+    .bottom-category-panel {
+
+        left: 50%;
+
+        bottom: 100px;
+
+        width: calc(100% - 24px);
+
+        max-height: calc(100vh - 130px);
+
+        overflow-y: auto;
+
+        border-radius: 32px;
+
+        z-index: 9000;
+
+    }
+
+
+    /* =====================================================
+       MORE PANEL
+       ===================================================== */
+
+    .bottom-more-panel {
+
+        left: 50%;
+        bottom: 16px;
+
+        width: calc(100% - 24px);
+
+        height: 72px;
+
+        border-radius: 28px;
+
+        z-index: 10000;
+
+    }
+
+
+    .bottom-more-panel button {
+
+        height: 58px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .bottom-nav {
+
+        left: 50%;
+        bottom: 10px;
+
+        width: calc(100% - 18px);
+
+        height: 68px;
+
+        padding: 6px;
+
+        border-radius: 25px;
+
+        z-index: 9999;
+
+        visibility: visible;
+        opacity: 1;
+
+    }
+
+
+    .bottom-nav-item {
+
+        height: 56px;
+
+    }
+
+
+    .bottom-nav-item svg {
+
+        width: 22px;
+        height: 22px;
+
+    }
+
+
+    .bottom-nav-item span {
+
+        font-size: 10px;
+
+        line-height: 1;
+
+    }
+
+
+    /* =====================================================
+       PHONE GLASS
+       ===================================================== */
+
+    .bottom-nav-indicator {
+
+        top: 6px;
+        left: 6px;
+
+        width: calc((100% - 12px) / 5);
+
+        height: 56px;
+
+        border-radius: 20px;
+
+    }
+
+
+    /* =====================================================
+       PHONE SEARCH
+       ===================================================== */
+
+    .bottom-search-bar {
+
+        left: 50%;
+        bottom: 10px;
+
+        width: calc(100% - 18px);
+
+        height: 68px;
+
+        border-radius: 24px;
+
+        z-index: 10000;
+
+    }
+
+
+    .bottom-search-bar input {
+
+        font-size: 15px;
+
+    }
+
+
+    /* =====================================================
+       PHONE CATEGORY PANEL
+       ===================================================== */
+
+    .bottom-category-panel {
+
+        left: 50%;
+
+        bottom: 88px;
+
+        width: calc(100% - 18px);
+
+        max-height: calc(100vh - 110px);
+
+        padding: 18px;
+
+        border-radius: 28px;
+
+        overflow-y: auto;
+
+    }
+
+
+    /* =====================================================
+       PHONE MORE PANEL
+       ===================================================== */
+
+    .bottom-more-panel {
+
+        left: 50%;
+        bottom: 10px;
+
+        width: calc(100% - 18px);
+
+        height: 68px;
+
+        border-radius: 24px;
+
+        z-index: 10000;
+
+    }
+
+
+    .bottom-more-panel button {
+
+        height: 56px;
+
+    }
+
+
+    .bottom-more-panel button svg {
+
+        width: 22px;
+        height: 22px;
+
+    }
+
+
+    .bottom-more-panel span {
+
+        font-size: 10px;
+
+    }
+
+}

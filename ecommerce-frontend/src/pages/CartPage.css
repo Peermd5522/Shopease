@@ -1,0 +1,33 @@
+.cart-page{
+    max-width:1200px;
+    margin:40px auto;
+    padding:0 30px;
+}
+
+.cart-container{
+    display:flex;
+    justify-content:space-between;
+    gap:40px;
+}
+
+.cart-items{
+    flex:2;
+}
+
+.cart-summary{
+    flex:1;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width:900px){
+
+.cart-container{
+    flex-direction:column;
+}
+
+.cart-summary{
+    width:100%;
+}
+
+}

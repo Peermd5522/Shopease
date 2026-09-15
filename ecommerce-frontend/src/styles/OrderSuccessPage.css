@@ -1,0 +1,212 @@
+.order-success {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 30px;
+}
+
+.success-content {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+
+/* Success Icon */
+
+.success-icon {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+    border-radius: 50%;
+    background: #eefaf1;
+    color: #22a447;
+    box-shadow:
+        0 20px 50px rgba(34, 164, 71, 0.08);
+
+    /* Circle animation */
+    animation: success-circle 0.6s ease-out forwards;
+}
+
+
+/* Checkmark */
+
+.success-icon span {
+    display: inline-block;
+    font-size: 86px;
+    font-weight: 500;
+    opacity: 0;
+
+    /* Checkmark animation starts after circle */
+    animation: success-check 0.5s ease-out 0.35s forwards;
+}
+
+
+/* Circle animation */
+
+@keyframes success-circle {
+
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Checkmark animation */
+
+@keyframes success-check {
+
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    80% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Heading */
+
+.success-content h1 {
+    margin: 0 0 24px;
+    color: #1d1d1f;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1.2px;
+}
+
+
+/* Message */
+
+.success-content p {
+    margin: 0 0 40px;
+    color: #6e6e73;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+
+/* Continue Shopping */
+
+.continue-shopping {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    min-width: 260px;
+    padding: 17px 30px;
+    border-radius: 14px;
+    background: #0066cc;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+
+/* Button Arrow */
+
+.continue-shopping span {
+    font-size: 22px;
+    line-height: 1;
+    transition: transform 0.25s ease;
+}
+
+
+/* Button Hover */
+
+.continue-shopping:hover {
+    background: #000;
+    transform: translateY(-3px);
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.18);
+}
+
+
+.continue-shopping:hover span {
+    transform: translateX(5px);
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+    .order-success {
+        min-height: calc(100vh - 70px);
+
+        padding: 40px 20px;
+    }
+
+
+    /* Smaller Success Icon */
+
+    .success-icon {
+        width: 110px;
+        height: 110px;
+        margin-bottom: 30px;
+    }
+
+
+    .success-icon span {
+        font-size: 62px;
+    }
+
+
+    /* Smaller Heading */
+
+    .success-content h1 {
+        font-size: 34px;
+        letter-spacing: -0.8px;
+    }
+
+
+    /* Smaller Message */
+
+    .success-content p {
+        font-size: 17px;
+    }
+
+
+    /* Mobile Button */
+
+    .continue-shopping {
+        width: 100%;
+        max-width: 280px;
+    }
+}
