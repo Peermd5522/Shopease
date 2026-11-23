@@ -7,3 +7,19 @@ node_modules/
 
 # Build output
 dist/
+# Python
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment variants
+.env.*
+*.env
+!.env.example
+
+# Python
+.venv/
+
+# Local archives
+frontend-src.zip

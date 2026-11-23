@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/auth/Login.css";
+import { API_URL } from "../../config";
 
 function Login() {
 
@@ -18,7 +19,7 @@ function Login() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/auth/login",
+            `${API_URL}/auth/login`,
             {
                 method: "POST",
 
@@ -87,6 +88,7 @@ function Login() {
                             placeholder="Enter your email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            autoComplete="username"
                         />
 
                     </div>
@@ -104,6 +106,7 @@ function Login() {
                             placeholder="Enter your password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="username"
                         />
 
                     </div>

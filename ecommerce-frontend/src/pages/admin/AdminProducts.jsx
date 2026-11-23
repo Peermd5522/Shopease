@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/admin/AdminProducts.css";
 import { AuthContext } from "../../context/AuthContext";
 import Toast from "../../components/Toast";
+import { API_URL } from "../../config";
 
 function AdminProducts() {
 
@@ -32,7 +33,7 @@ function AdminProducts() {
             try {
 
                 const response = await fetch(
-                    "http://localhost:3000/products"
+                    `${API_URL}/products`
                 );
 
                 if (!response.ok) {
@@ -68,7 +69,7 @@ function AdminProducts() {
         try {
 
             const response = await fetch(
-                `http://localhost:3000/products/${id}`,
+                `${API_URL}/products/${id}`,
                 {
                     method: "DELETE",
 

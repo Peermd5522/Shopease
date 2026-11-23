@@ -1,0 +1,358 @@
+
+/* CHECKOUT PAGE */
+
+.checkout-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 65px 30px 90px;
+    color: #171717;
+}
+
+.checkout-header {
+    margin-bottom: 45px;
+}
+
+.checkout-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.checkout-header h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    letter-spacing: -2px;
+    margin: 0 0 12px;
+    font-weight: 700;
+}
+
+.checkout-header > p:last-child {
+    color: #777;
+    font-size: 15px;
+}
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr;
+    gap: 35px;
+    align-items: start;
+}
+
+.checkout-details,
+.checkout-summary {
+    min-width: 0;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 18px;
+    padding: 32px;
+}
+
+/* SECTION HEADING */
+
+.checkout-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 32px;
+}
+
+.checkout-step {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #f2f4f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #555;
+}
+
+.checkout-section-heading h2 {
+    font-size: 19px;
+    margin: 0 0 5px;
+}
+
+.checkout-section-heading p {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+/* FORM FIELDS */
+
+.checkout-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.checkout-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.checkout-field label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.checkout-field input,
+.checkout-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 16px;
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    background: #fafafa;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.checkout-field input:focus,
+.checkout-field textarea:focus {
+    border-color: #222;
+    background: #fff;
+}
+
+.checkout-field textarea {
+    min-height: 125px;
+    resize: vertical;
+}
+
+.checkout-field input::placeholder,
+.checkout-field textarea::placeholder {
+    color: #aaa;
+}
+
+/* ORDER SUMMARY */
+
+.checkout-summary {
+    position: sticky;
+    top: 25px;
+}
+
+.checkout-items {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.checkout-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.checkout-item-image {
+    width: 65px;
+    height: 65px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.checkout-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f5f5f5;
+}
+
+.checkout-item-image span {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    background: #222;
+    color: #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+}
+
+.checkout-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.checkout-item-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 7px;
+    overflow-wrap: anywhere;
+}
+
+.checkout-item-info p {
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+}
+
+.checkout-item > strong {
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* TOTAL */
+
+.checkout-total {
+    border-top: 1px solid #eee;
+    margin-top: 28px;
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.checkout-total span {
+    color: #666;
+    font-size: 14px;
+}
+
+.checkout-total strong {
+    font-size: 23px;
+}
+
+/* PLACE ORDER */
+
+.place-order-btn {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 25px;
+    padding: 17px;
+    border: none;
+    border-radius: 10px;
+    background: #171717;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.place-order-btn:hover {
+    background: #383838;
+    transform: translateY(-2px);
+}
+
+.place-order-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.checkout-secure-note {
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+    margin: 18px 0 0;
+}
+
+.checkout-secure-note span {
+    color: #258653;
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+.checkout-error {
+    color: #c62828;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+/* TABLET */
+
+@media (max-width: 800px) {
+    .checkout-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    .checkout-summary {
+        position: static;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+    .checkout-page {
+        padding: 35px 16px 60px;
+    }
+
+    .checkout-header {
+        margin-bottom: 28px;
+    }
+
+    .checkout-header h1 {
+        letter-spacing: -1px;
+        font-size: 34px;
+    }
+
+    .checkout-header > p:last-child {
+        font-size: 13px;
+    }
+
+    .checkout-details,
+    .checkout-summary {
+        padding: 22px 16px;
+        border-radius: 14px;
+    }
+
+    .checkout-section-heading {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .checkout-section-heading h2 {
+        font-size: 17px;
+    }
+
+    .checkout-fields {
+        gap: 18px;
+    }
+
+    .checkout-field input,
+    .checkout-field textarea {
+        padding: 13px 12px;
+        font-size: 14px;
+    }
+
+    .checkout-item {
+        gap: 10px;
+    }
+
+    .checkout-item-image {
+        width: 55px;
+        height: 55px;
+    }
+
+    .checkout-item > strong {
+        font-size: 12px;
+    }
+
+    .checkout-total strong {
+        font-size: 20px;
+    }
+
+    .place-order-btn {
+        padding: 15px;
+    }
+}

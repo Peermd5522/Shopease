@@ -1,39 +1,45 @@
-import { Search, ShoppingBag, User } from "lucide-react";
+
 import { Link } from "react-router-dom";
-import { useRef, useEffect } from "react";
+import { User, Sparkles } from "lucide-react";
+import Chatbot from "./Chatbot";
 import "../styles/Navbar.css";
 
-function Navbar() {
+function Navbar({ chatOpen, setChatOpen }) {
 
     return (
+        <>
+            <header className={`navbar ${chatOpen ? "navbar-hidden" : ""}`}>
 
-        <header className="navbar">
+                <div className="navbar-store">
+                    <Link to="/home">Shopease</Link>
+                </div>
 
-            {/* Store */}
+                <div className="navbar-actions">
 
-            <div className="navbar-store">
+                    <Link
+                        to="/profile"
+                        className="navbar-profile"
+                        aria-label="Profile"
+                    >
+                        <User size={22} />
+                    </Link>
 
-                <Link to="/home">
-                    Store
-                </Link>
+                    <button
+                        className="navbar-assistant"
+                        onClick={() => setChatOpen(true)}
+                        aria-label="Open AI assistant"
+                    >
+                        <Sparkles size={22} />
+                    </button>
 
-            </div>
+                </div>
+            </header>
 
-
-            {/* Profile */}
-
-            <Link
-                to="/profile"
-                className="navbar-profile"
-                aria-label="Profile"
-            >
-
-                <User size={1000} />
-
-            </Link>
-
-        </header>
-
+            <Chatbot
+                isOpen={chatOpen}
+                onClose={() => setChatOpen(false)}
+            />
+        </>
     );
 }
 

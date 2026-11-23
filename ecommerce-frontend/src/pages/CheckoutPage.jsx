@@ -1,129 +1,179 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "./CheckoutPage.css";
+import { API_URL } from "../config";
 
 function CheckoutPage(props) {
-
     const [customerName, setCustomerName] = useState("");
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
-
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
 
-    e.preventDefault();
+        try {
+            const orderItems = props.cart.map((item) => ({
+                productId: item._id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                image: item.image
+            }));
 
-    try {
+            const response = await fetch(`${API_URL}/orders`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    customerName,
+                    phone,
+                    address,
+                    items: orderItems,
+                    total: props.total
+                })
+            });
 
-        const orderItems = props.cart.map((item) => ({
-            productId: item._id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-            image: item.image
-        }));
+            const data = await response.json();
 
-        const response = await fetch("http://localhost:3000/orders", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                customerName,
-                phone,
-                address,
-                items: orderItems,
-                total: props.total
-            })
-        });
+            if (!response.ok) {
+                throw new Error(data.message || "Order placement failed");
+            }
 
-        const data = await response.json();
+            console.log("Order placed:", data);
 
-        if (!response.ok) {
-            throw new Error(data.message);
+            props.clearCart();
+            navigate("/order-success");
+
+        } catch (error) {
+            console.error("Order failed:", error);
+            setError(error.message || "Something went wrong.");
         }
-
-        console.log("Order placed:", data);
-
-        props.clearCart();
-        navigate("/order-success");
-
-    } catch (error) {
-
-        console.error("Order failed:", error);
-
-    }
-
-};
+    };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div className="checkout-page">
 
-            <h1>Checkout</h1>
-
-            <div>
-
-                <h2>Delivery Details</h2>
-
-                <input
-                    type="text"
-                    placeholder="Full Name"
-                    value={customerName}
-                    onChange={(e) =>
-                        setCustomerName(e.target.value)
-                    }
-                />
-
-                <input
-                    type="text"
-                    placeholder="Phone Number"
-                    value={phone}
-                    onChange={(e) =>
-                        setPhone(e.target.value)
-                    }
-                />
-
-                <textarea
-                    placeholder="Delivery Address"
-                    value={address}
-                    onChange={(e) =>
-                        setAddress(e.target.value)
-                    }
-                />
-
+            <div className="checkout-header">
+                <p className="checkout-eyebrow">SHOPEASE / CHECKOUT</p>
+                <h1>Complete your order.</h1>
+                <p>Just a few details before your order is on its way.</p>
             </div>
 
-            <div>
+            <form className="checkout-layout" onSubmit={handleSubmit}>
 
-                <h2>Order Summary</h2>
+                <section className="checkout-details">
 
-                {props.cart.map((item) => (
+                    <div className="checkout-section-heading">
+                        <span className="checkout-step">01</span>
+                        <div>
+                            <h2>Delivery details</h2>
+                            <p>Where should we deliver your order?</p>
+                        </div>
+                    </div>
 
-                    <div key={item._id}>
+                    <div className="checkout-fields">
 
-                        <p>{item.name}</p>
+                        <div className="checkout-field">
+                            <label>Full name</label>
+                            <input
+                                type="text"
+                                placeholder="Enter your full name"
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                                required
+                            />
+                        </div>
 
-                        <p>
-                            ₹{item.price} × {item.quantity}
-                        </p>
+                        <div className="checkout-field">
+                            <label>Phone number</label>
+                            <input
+                                type="tel"
+                                placeholder="Enter your phone number"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className="checkout-field">
+                            <label>Delivery address</label>
+                            <textarea
+                                placeholder="Enter your complete delivery address"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                required
+                            />
+                        </div>
 
                     </div>
 
-                ))}
+                    {error && (
+                        <p className="checkout-error">{error}</p>
+                    )}
 
-                <h3>
-                    Total: ₹{props.total}
-                </h3>
+                </section>
 
-                <button type="submit">
-                    Place Order
-                </button>
+                <aside className="checkout-summary">
 
-            </div>
+                    <div className="checkout-section-heading">
+                        <span className="checkout-step">02</span>
+                        <div>
+                            <h2>Order summary</h2>
+                            <p>Review your items</p>
+                        </div>
+                    </div>
 
-        </form>
+                    <div className="checkout-items">
+
+                        {props.cart.map((item) => (
+                            <div className="checkout-item" key={item._id}>
+
+                                <div className="checkout-item-image">
+                                    <img src={item.image} alt={item.name} />
+                                    <span>{item.quantity}</span>
+                                </div>
+
+                                <div className="checkout-item-info">
+                                    <h3>{item.name}</h3>
+                                    <p>₹{item.price} × {item.quantity}</p>
+                                </div>
+
+                                <strong>
+                                    ₹{(item.price * item.quantity).toFixed(2)}
+                                </strong>
+
+                            </div>
+                        ))}
+
+                    </div>
+
+                    <div className="checkout-total">
+                        <span>Total</span>
+                        <strong>₹{Number(props.total).toFixed(2)}</strong>
+                    </div>
+
+                    <button
+                        className="place-order-btn"
+                        type="submit"
+                        disabled={props.cart.length === 0}
+                    >
+                        Place Order <span>→</span>
+                    </button>
+
+                    <p className="checkout-secure-note">
+                        <span>✓</span> Your order details are securely submitted.
+                    </p>
+
+                </aside>
+
+            </form>
+        </div>
     );
 }
 

@@ -133,14 +133,74 @@ router.post("/login", async (req, res) => {
 });
 
 
-router.get("/me", authMiddleware, (req, res) => {
 
-    res.status(200).json({
-        message: "You are authenticated",
-        user: req.user
-    });
+// Get customer profile
+router.get("/me", authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password");
 
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        res.status(200).json({
+            user
+        });
+
+    } catch (error) {
+        console.error("Profile fetch error:", error);
+        res.status(500).json({
+            message: "Server error"
+        });
+    }
 });
+
+
+// Update customer profile
+router.put("/me", authMiddleware, async (req, res) => {
+    try {
+        const { name, phone, address } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({
+                message: "Name is required"
+            });
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            {
+                name: name.trim(),
+                phone: phone || "",
+                address: address || ""
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        ).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Profile updated successfully",
+            user
+        });
+
+    } catch (error) {
+        console.error("Profile update error:", error);
+        res.status(500).json({
+            message: "Server error"
+        });
+    }
+});
+
 
 router.get(
     "/admin-test",

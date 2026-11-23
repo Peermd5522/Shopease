@@ -1,8 +1,9 @@
+
 import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import AdminNavbar from "./AdminNavbar";
 
-function AppLayout({ children, navbarProps }) {
+function AppLayout({ children, navbarProps, chatOpen, setChatOpen }) {
 
     const location = useLocation();
 
@@ -21,7 +22,6 @@ function AppLayout({ children, navbarProps }) {
         return (
             <>
                 <AdminNavbar />
-
                 {children}
             </>
         );
@@ -29,7 +29,11 @@ function AppLayout({ children, navbarProps }) {
 
     return (
         <>
-            <Navbar {...navbarProps} />
+            <Navbar
+                {...navbarProps}
+                chatOpen={chatOpen}
+                setChatOpen={setChatOpen}
+            />
 
             {children}
         </>

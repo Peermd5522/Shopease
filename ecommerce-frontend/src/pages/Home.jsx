@@ -1,4 +1,5 @@
 import ProductCard from "../components/ProductCard";
+import Chatbot from "../components/Chatbot";
 import "./Home.css";
 
 function Home(props){
@@ -22,6 +23,8 @@ function Home(props){
                 ))}
 
             </div>
+
+            <Chatbot />
 
         </div>
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Toast from "../../components/Toast";
 import "../../styles/admin/AddProduct.css";
+import { API_URL } from "../../config";
 
 function AddProduct() {
 
@@ -34,7 +35,7 @@ function AddProduct() {
         try {
 
             const response = await fetch(
-                "http://localhost:3000/products",
+                `${API_URL}/products`,
                 {
                     method: "POST",
                     headers: {

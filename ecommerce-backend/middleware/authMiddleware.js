@@ -12,7 +12,18 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
-        const token = authHeader.split(" ")[1];
+       const parts = authHeader.split(" ");
+
+        if (parts.length !== 2 || parts[0] !== "Bearer" || !parts[1]) {
+            return res.status(401).json({
+                message: "Invalid authorization header format"
+            });
+        }
+
+        const token = parts[1];
+
+        console.log("JWT secret loaded:", Boolean(process.env.JWT_SECRET));
+        console.log("Authorization scheme:", parts[0]);
 
         const decoded = jwt.verify(
             token,

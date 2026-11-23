@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import "../styles/ProductPage.css";
+import { API_URL } from "../config";
 
 function ProductPage(props) {
 
@@ -11,7 +12,7 @@ function ProductPage(props) {
     const [error, setError] = useState("");
 
     useEffect(() => {
-    fetch(`http://localhost:3000/products/${id}`)
+    fetch(`${API_URL}/products/${id}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Product not found");

@@ -1,0 +1,264 @@
+
+.profile-page {
+    min-height: 85vh;
+    padding: 55px 20px;
+    background: var(--background, #f7f8fa);
+    box-sizing: border-box;
+}
+
+.profile-container {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    min-width: 0;
+}
+
+.profile-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-heading h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: var(--text, #222);
+}
+
+.profile-heading p {
+    color: #888;
+    font-size: 14px;
+}
+
+.profile-card {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--card-bg, #fff);
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.06);
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 85px;
+    height: 85px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: #e9edff;
+    color: #536dfe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 34px;
+    font-weight: 600;
+}
+
+.profile-card h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+    color: var(--text, #222);
+    overflow-wrap: anywhere;
+}
+
+.profile-email {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 30px;
+    overflow-wrap: anywhere;
+}
+
+.profile-field {
+    text-align: left;
+    margin-bottom: 20px;
+    min-width: 0;
+}
+
+.profile-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text, #333);
+}
+
+.profile-field input,
+.profile-field textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #e3e5e9;
+    border-radius: 9px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    background: var(--card-bg, #fff);
+    color: var(--text, #222);
+    box-sizing: border-box;
+}
+
+.profile-field input:disabled,
+.profile-field textarea:disabled {
+    background: var(--background, #f7f8fa);
+    color: #777;
+    cursor: default;
+}
+
+.profile-field input:focus,
+.profile-field textarea:focus {
+    border-color: #536dfe;
+}
+
+.profile-field textarea {
+    resize: vertical;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.profile-actions button,
+.profile-logout-btn {
+    padding: 13px 18px;
+    border: none;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.profile-edit-btn,
+.profile-save-btn {
+    flex: 1;
+    background: #222;
+    color: white;
+}
+
+.profile-edit-btn:hover,
+.profile-save-btn:hover {
+    background: #444;
+}
+
+.profile-cancel-btn {
+    background: #eee;
+    color: #333;
+}
+
+.profile-logout-btn {
+    width: 100%;
+    margin-top: 18px;
+    background: #fff0f0;
+    color: #d93636;
+}
+
+.profile-logout-btn:hover {
+    background: #ffe0e0;
+}
+
+.profile-loading {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.profile-error {
+    color: #d93636;
+    font-size: 14px;
+    margin: 12px 0;
+    overflow-wrap: anywhere;
+}
+
+.profile-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text, #222);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.profile-back-btn:hover {
+    color: #536dfe;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .profile-page {
+        padding: 40px 20px;
+    }
+
+    .profile-card {
+        padding: 30px 24px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .profile-page {
+        padding: 30px 14px;
+    }
+
+    .profile-heading {
+        margin-bottom: 24px;
+    }
+
+    .profile-heading h1 {
+        font-size: 27px;
+    }
+
+    .profile-card {
+        padding: 25px 18px;
+        border-radius: 16px;
+    }
+
+    .profile-avatar {
+        width: 75px;
+        height: 75px;
+        font-size: 30px;
+    }
+
+    .profile-card h2 {
+        font-size: 20px;
+    }
+
+    .profile-email {
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    .profile-actions {
+        gap: 9px;
+    }
+
+    .profile-actions button,
+    .profile-logout-btn {
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+
+    .profile-back-btn {
+        margin-bottom: 20px;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 380px) {
+    .profile-page {
+        padding: 25px 12px;
+    }
+
+    .profile-card {
+        padding: 22px 14px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .profile-actions button {
+        width: 100%;
+    }
+}

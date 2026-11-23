@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "../../styles/admin/EditProduct.css";
 import Toast from "../../components/Toast";
+import { API_URL } from "../../config";
 
 function EditProduct() {
 
     const { id } = useParams();
-    const navigate = useNavigate();
 
     const [product, setProduct] = useState(null);
 
@@ -32,7 +32,7 @@ function EditProduct() {
             try {
 
                 const response = await fetch(
-                    `http://localhost:3000/products/${id}`
+                    `${API_URL}/products/${id}`
                 );
 
                 if (!response.ok) {
@@ -87,7 +87,7 @@ function EditProduct() {
         try {
 
             const response = await fetch(
-                `http://localhost:3000/products/${id}`,
+                `${API_URL}/products/${id}`,
                 {
                     method: "PUT",
 
@@ -120,7 +120,6 @@ function EditProduct() {
                 setShowToast(false);
             }, 2500);
 
-            // navigate(`/product/${id}`);
 
         } catch (error) {
 

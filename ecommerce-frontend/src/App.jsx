@@ -1,14 +1,14 @@
+
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import AppLayout from "./components/AppLayout";
-
 
 import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import AdminRoute from "./routes/AdminRoute";
 
-
 import Home from "./pages/Home";
+import ProfilePage from "./pages/ProfilePage";
 import CartPage from "./pages/CartPage";
 import ProductPage from "./pages/ProductPage";
 
@@ -17,7 +17,6 @@ import BottomNav from "./components/BottomNav";
 import Toast from "./components/Toast";
 
 import WishlistPage from "./pages/WishlistPage";
-
 
 import AddProduct from "./pages/admin/AddProduct";
 import EditProduct from "./pages/admin/EditProduct";
@@ -29,53 +28,13 @@ import OrderSuccessPage from "./pages/OrderSuccessPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+import { API_URL } from "./config";
 
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 
-
-function App() {
-
-  const location = useLocation();
-
-
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem("cart");
-
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-
-  const [wishlist, setWishlist] = useState(() => {
-
-    const savedWishlist = localStorage.getItem("wishlist");
-
-    return savedWishlist
-        ? JSON.parse(savedWishlist)
-        : [];
-  });
-
-  const [search, setSearch] = useState("");
-
-  const [products, setProducts] = useState([]);
-
-  const [category, setCategory] =useState("all");
-  const [categories, setCategories] = useState([]);
-
-  const [sort, setSort] = useState("default");
-
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  const [showToast, setShowToast] = useState(false);
-
-  const [toastProduct, setToastProduct] = useState(null);
-
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("theme") || "light";
-  });
-
-
-  const featuredCategories = [
+const featuredCategories = [
     "smartphones",
     "laptops",
     "mens-shirts",
@@ -84,414 +43,590 @@ function App() {
     "fragrances",
     "furniture",
     "groceries"
-  ];
-  
-  const openSearch = () => {
-    setSearchOpen(true);
-  };
-
-  const closeSearch = () => {
-    setSearchOpen(false);
-  };
-
-  const toggleSearch = () => {
-    setSearchOpen((prev) => !prev);
-  };
-
-//useEffects cart
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-//wishlist
-  useEffect(() => {
-    localStorage.setItem(
-        "wishlist",
-        JSON.stringify(wishlist)
-    );
-   }, [wishlist]);
+];
 
 
-//Dark Theme
+function App() {
 
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+    const location = useLocation();
 
 
-//API fetching
-  useEffect(() => {
-     fetch("http://localhost:3000/products")
-     .then((response) => response.json())
-     .then((data) =>{
-        console.log(data)
-        setProducts(data)
-     });
-  }, []);
+    // CART
 
-  useEffect(() => {
-    const uniqueCategories = [
-        ...new Set(products.map((product) => product.category))
-    ];
+    const [cart, setCart] = useState(() => {
+        const savedCart = localStorage.getItem("cart");
 
-    const filtered = uniqueCategories.filter((category) =>
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
+
+
+    // WISHLIST
+
+    const [wishlist, setWishlist] = useState(() => {
+        const savedWishlist = localStorage.getItem("wishlist");
+
+        return savedWishlist ? JSON.parse(savedWishlist) : [];
+    });
+
+
+    // PRODUCTS AND FILTERS
+
+    const [search, setSearch] = useState("");
+
+    const [products, setProducts] = useState([]);
+
+    const [category, setCategory] = useState("all");
+
+    const [searchOpen, setSearchOpen] = useState(false);
+
+
+    // SORTING
+
+    const sort = "default";
+
+
+    // TOAST
+
+    const [showToast, setShowToast] = useState(false);
+
+
+    // CHATBOT
+
+    const [chatOpen, setChatOpen] = useState(false);
+
+
+    // THEME
+
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("theme") || "light";
+    });
+
+
+    // SEARCH CONTROLS
+
+    const closeSearch = () => {
+        setSearchOpen(false);
+    };
+
+    const toggleSearch = () => {
+        setSearchOpen((prev) => !prev);
+    };
+
+
+    // SAVE CART
+
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
+
+
+    // SAVE WISHLIST
+
+    useEffect(() => {
+        localStorage.setItem(
+            "wishlist",
+            JSON.stringify(wishlist)
+        );
+    }, [wishlist]);
+
+
+    // SAVE THEME
+
+    useEffect(() => {
+        localStorage.setItem("theme", theme);
+    }, [theme]);
+
+
+    // FETCH PRODUCTS
+
+    useEffect(() => {
+
+        fetch(`${API_URL}/products`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                setProducts(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching products:", error);
+            });
+
+    }, []);
+
+
+    // GET CATEGORIES
+
+    const categories = [
+        ...new Set(
+            products.map((product) => product.category)
+        )
+    ].filter((category) =>
         featuredCategories.includes(category)
     );
 
-    setCategories(filtered);
-  }, [products]);
 
+    // FILTER PRODUCTS BY CATEGORY
 
-  const filteredProducts = products.filter((item) => {
-    
-      const matchesSearch =
-          item.name.toLowerCase().includes(search.toLowerCase());
+    const filteredProducts = products.filter((item) => {
 
-      const matchesCategory =
-          category === "all" ||
+        const matchesCategory =
+            category === "all" ||
 
-          (category === "fashion"
-              ? [
-                  "mens-shirts",
-                  "mens-shoes",
-                  "mens-watches",
-                  "womens-dresses",
-                  "womens-shoes",
-                  "womens-bags",
-                  "womens-jewellery"
+            (category === "fashion"
+                ? [
+                    "mens-shirts",
+                    "mens-shoes",
+                    "mens-watches",
+                    "womens-dresses",
+                    "womens-shoes",
+                    "womens-bags",
+                    "womens-jewellery"
                 ].includes(item.category)
 
-              : item.category === category);
+                : item.category === category);
 
-        return matchesSearch && matchesCategory;    
-  });
+        return matchesCategory;
 
-  const sortedProducts = [...filteredProducts];
-
-    if (sort === "low-high") {
-    sortedProducts.sort((a, b) => a.price - b.price);
-    }
-
-    if (sort === "high-low") {
-        sortedProducts.sort((a, b) => b.price - a.price);
-    }
-
-    if (sort === "a-z") {
-        sortedProducts.sort((a, b) =>
-            a.name.localeCompare(b.name)
-        );
-    }
-
-    if (sort === "z-a") {
-        sortedProducts.sort((a, b) =>
-            b.name.localeCompare(a.name)
-        );
-    }
-
-    // if (sort === "rating-low-high") {
-    //     sortedProducts.sort((a, b) =>
-    //         a.rating.rate - b.rating.rate
-    //     );
-    // }
-
-    // if (sort === "rating-high-low") {
-    //     sortedProducts.sort((a, b) =>
-    //         b.rating.rate - a.rating.rate
-    //     );
-    // }
-
-  // Add to Cart
-  function addToCart(product) {
-    const existingItem = cart.find(
-      (item) => item._id === product._id
-    );
-
-    if (existingItem) {
-      setCart(
-        cart.map((item) =>
-          item._id === product._id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-              }
-            : item
-        )
-      );
-    } else {
-      setCart([
-        ...cart,
-        {
-          ...product,
-          quantity: 1,
-        },
-      ]);
-    }
-
-    setToastProduct(product);
-    setShowToast(true);
-    setTimeout(() => {
-    setShowToast(false);
-    }, 2500);
-  }
+    });
 
 
-  function toggleWishlist(product) {
+    // SEARCH RANKING + SORTING
 
-    setWishlist((prevWishlist) => {
+    const sortedProducts = [...filteredProducts];
 
-        const exists = prevWishlist.find(
+    const searchTerm = search.trim().toLowerCase();
+
+    const getSearchScore = (product) => {
+
+        const name = (product.name || "").toLowerCase();
+        const brand = (product.brand || "").toLowerCase();
+        const category = (product.category || "").toLowerCase();
+        const description = (product.description || "").toLowerCase();
+
+        if (name === searchTerm) return 5;
+        if (name.startsWith(searchTerm)) return 4;
+        if (name.includes(searchTerm)) return 3;
+        if (brand.includes(searchTerm)) return 2;
+        if (category.includes(searchTerm)) return 1;
+        if (description.includes(searchTerm)) return 1;
+
+        return 0;
+    };
+
+    sortedProducts.sort((a, b) => {
+
+        if (searchTerm) {
+
+            const scoreDifference =
+                getSearchScore(b) - getSearchScore(a);
+
+            if (scoreDifference !== 0) {
+                return scoreDifference;
+            }
+        }
+
+        if (sort === "low-high") return a.price - b.price;
+
+        if (sort === "high-low") return b.price - a.price;
+
+        if (sort === "a-z") {
+            return (a.name || "").localeCompare(b.name || "");
+        }
+
+        if (sort === "z-a") {
+            return (b.name || "").localeCompare(a.name || "");
+        }
+
+        return 0;
+    });
+
+
+    // ADD TO CART
+
+    function addToCart(product) {
+
+        const existingItem = cart.find(
             (item) => item._id === product._id
         );
 
-        if (exists) {
-            return prevWishlist.filter(
-                (item) => item._id !== product._id
+        if (existingItem) {
+
+            setCart(
+                cart.map((item) =>
+                    item._id === product._id
+                        ? {
+                            ...item,
+                            quantity: item.quantity + 1,
+                        }
+                        : item
+                )
             );
+
+        } else {
+
+            setCart([
+                ...cart,
+                {
+                    ...product,
+                    quantity: 1,
+                },
+            ]);
+
         }
 
-        return [...prevWishlist, product];
-    });
+        setShowToast(true);
 
-}
+        setTimeout(() => {
+            setShowToast(false);
+        }, 2500);
 
-function toggleTheme() {
-    setTheme((prev) =>
-        prev === "light" ? "dark" : "light"
-    );
-}
-
-
-  // Delete Item
-  function deleteItem(id) {
-    setCart(
-      cart.filter((item) => item._id !== id)
-    );
-  }
-
-  function clearCart() {
-    setCart([]);
-  }
-
-  // Increase Quantity
-  function increaseQuantity(id) {
-    setCart(
-      cart.map((item) =>
-        item._id === id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-            }
-          : item
-      )
-    );
-  }
-
-  // Decrease Quantity
-  function decreaseQuantity(id) {
-    const existingItem = cart.find(
-      (item) => item._id === id
-    );
-
-    if (existingItem.quantity > 1) {
-      setCart(
-        cart.map((item) =>
-          item._id === id
-            ? {
-                ...item,
-                quantity: item.quantity - 1,
-              }
-            : item
-        )
-      );
-    } else {
-      deleteItem(id);
     }
-  }
-
-  const total = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  const cartCount = cart.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
-
-  return (
-  <div className="app">
-
-    <div className={theme} >
 
 
-    <Toast
-        show={showToast}
-        message="Added to Bag"
-    />
+    // TOGGLE WISHLIST
 
-    <AppLayout
-    navbarProps={{
-        cartCount,
-        toggleSearch,
-        searchOpen,
-        closeSearch,
-        search,
-        setSearch,
-        theme,
-        toggleTheme
-    }}
-></AppLayout>
+    function toggleWishlist(product) {
+
+        setWishlist((prevWishlist) => {
+
+            const exists = prevWishlist.find(
+                (item) => item._id === product._id
+            );
+
+            if (exists) {
+
+                return prevWishlist.filter(
+                    (item) => item._id !== product._id
+                );
+
+            }
+
+            return [...prevWishlist, product];
+
+        });
+
+    }
 
 
-    <Routes>
+    // TOGGLE THEME
+
+    function toggleTheme() {
+
+        setTheme((prev) =>
+            prev === "light" ? "dark" : "light"
+        );
+
+    }
 
 
-      <Route
-        path="/"
-        element={<Navigate to="/login" replace />}
-      />
+    // DELETE CART ITEM
 
-      <Route
-          path="/login"
-          element={<Login />}
-      />
+    function deleteItem(id) {
 
-      <Route
-          path="/signup"
-          element={<Signup />}
-      />
+        setCart(
+            cart.filter((item) => item._id !== id)
+        );
 
-      <Route
-        path="/home"
-        element={
-           <> 
-            
-            <Hero />
-            
+    }
 
-            <Home
-                products={sortedProducts}
-                addToCart={addToCart}
-                category={category}
-                setCategory={setCategory}
-                toggleWishlist={toggleWishlist}
-                wishlist={wishlist}
-            />
-          </>
+
+    // CLEAR CART
+
+    function clearCart() {
+        setCart([]);
+    }
+
+
+    // INCREASE QUANTITY
+
+    function increaseQuantity(id) {
+
+        setCart(
+            cart.map((item) =>
+                item._id === id
+                    ? {
+                        ...item,
+                        quantity: item.quantity + 1,
+                    }
+                    : item
+            )
+        );
+
+    }
+
+
+    // DECREASE QUANTITY
+
+    function decreaseQuantity(id) {
+
+        const existingItem = cart.find(
+            (item) => item._id === id
+        );
+
+        if (existingItem && existingItem.quantity > 1) {
+
+            setCart(
+                cart.map((item) =>
+                    item._id === id
+                        ? {
+                            ...item,
+                            quantity: item.quantity - 1,
+                        }
+                        : item
+                )
+            );
+
+        } else {
+
+            deleteItem(id);
+
         }
-      />
+
+    }
 
 
-      <Route
-        path="/product/:id"
-        element={
-            <ProductPage
-                products={products}
-                addToCart={addToCart}
-                toggleWishlist={toggleWishlist}
-                wishlist={wishlist}
-            />
-        }
-      />
+    // CART TOTAL
 
-      <Route
-        path="/cart"
-        element={
-          <CartPage
-            cart={cart}
-            total={total}
-            deleteItem={deleteItem}
-            increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}
-          />
-        }
-      />
-
-      <Route
-          path="/checkout"
-          element={
-              <CheckoutPage
-                  cart={cart}
-                  total={total}
-                  clearCart={clearCart}
-              />
-          }
-      />
-
-      <Route
-          path="/order-success"
-          element={<OrderSuccessPage />}
-      />
-
-      <Route
-        path="/wishlist"
-        element={
-          <WishlistPage
-            wishlist={wishlist}
-            toggleWishlist={toggleWishlist}
-            addToCart={addToCart}
-          />
-        }
-      />
-
-      <Route
-          path="/admin"
-          element={
-              <AdminRoute>
-                  <AdminDashboard />
-              </AdminRoute>
-          }
-      />
-
-      <Route
-          path="/admin/products/add"
-          element={
-              <AdminRoute>
-                  <AddProduct />
-              </AdminRoute>
-          }
-      />
-
-      <Route
-          path="/admin/products/edit/:id"
-          element={
-              <AdminRoute>
-                  <EditProduct />
-              </AdminRoute>
-          }
-      />
-
-      <Route
-          path="/admin/products"
-          element={
-              <AdminRoute>
-                  <AdminProducts />
-              </AdminRoute>
-          }
-      />
+    const total = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+    );
 
 
-    </Routes>
+    // CART COUNT
 
-    {location.pathname !== "/login" &&
-    location.pathname !== "/signup" && (
-        <BottomNav
-            search={search}
-            setSearch={setSearch}
-            searchOpen={searchOpen}
-            setSearchOpen={setSearchOpen}
+    const cartCount = cart.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+    );
 
-            category={category}
-            setCategory={setCategory}
 
-            categories={categories}
-        />
-    )}
+    // RENDER
 
-    </div>
+    return (
 
-  </div>
-  );
+        <div className="app">
+
+            <div className={theme}>
+
+                <Toast
+                    show={showToast}
+                    message="Added to Bag"
+                />
+
+
+                {/* APP LAYOUT */}
+
+                <AppLayout
+                    chatOpen={chatOpen}
+                    setChatOpen={setChatOpen}
+                    navbarProps={{
+                        cartCount,
+                        toggleSearch,
+                        searchOpen,
+                        closeSearch,
+                        search,
+                        setSearch,
+                        theme,
+                        toggleTheme
+                    }}
+                />
+
+
+                {/* ROUTES */}
+
+                <Routes>
+
+                    <Route
+                        path="/"
+                        element={<Navigate to="/login" replace />}
+                    />
+
+                    <Route
+                        path="/login"
+                        element={<Login />}
+                    />
+
+                    <Route
+                        path="/signup"
+                        element={<Signup />}
+                    />
+
+                    <Route
+                        path="/profile"
+                        element={
+                            <ProtectedRoute>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+
+                    {/* HOME */}
+
+                    <Route
+                        path="/home"
+                        element={
+                            <>
+
+                                <Hero />
+
+                                <Home
+                                    products={sortedProducts}
+                                    addToCart={addToCart}
+                                    category={category}
+                                    setCategory={setCategory}
+                                    toggleWishlist={toggleWishlist}
+                                    wishlist={wishlist}
+                                />
+
+                            </>
+                        }
+                    />
+
+
+                    {/* PRODUCT DETAILS */}
+
+                    <Route
+                        path="/product/:id"
+                        element={
+                            <ProductPage
+                                products={products}
+                                addToCart={addToCart}
+                                toggleWishlist={toggleWishlist}
+                                wishlist={wishlist}
+                            />
+                        }
+                    />
+
+
+                    {/* CART */}
+
+                    <Route
+                        path="/cart"
+                        element={
+                            <CartPage
+                                cart={cart}
+                                total={total}
+                                deleteItem={deleteItem}
+                                increaseQuantity={increaseQuantity}
+                                decreaseQuantity={decreaseQuantity}
+                            />
+                        }
+                    />
+
+
+                    {/* CHECKOUT */}
+
+                    <Route
+                        path="/checkout"
+                        element={
+                            <CheckoutPage
+                                cart={cart}
+                                total={total}
+                                clearCart={clearCart}
+                            />
+                        }
+                    />
+
+
+                    {/* ORDER SUCCESS */}
+
+                    <Route
+                        path="/order-success"
+                        element={<OrderSuccessPage />}
+                    />
+
+
+                    {/* WISHLIST */}
+
+                    <Route
+                        path="/wishlist"
+                        element={
+                            <WishlistPage
+                                wishlist={wishlist}
+                                toggleWishlist={toggleWishlist}
+                                addToCart={addToCart}
+                            />
+                        }
+                    />
+
+
+                    {/* ADMIN DASHBOARD */}
+
+                    <Route
+                        path="/admin"
+                        element={
+                            <AdminRoute>
+                                <AdminDashboard />
+                            </AdminRoute>
+                        }
+                    />
+
+
+                    {/* ADD PRODUCT */}
+
+                    <Route
+                        path="/admin/products/add"
+                        element={
+                            <AdminRoute>
+                                <AddProduct />
+                            </AdminRoute>
+                        }
+                    />
+
+
+                    {/* EDIT PRODUCT */}
+
+                    <Route
+                        path="/admin/products/edit/:id"
+                        element={
+                            <AdminRoute>
+                                <EditProduct />
+                            </AdminRoute>
+                        }
+                    />
+
+
+                    {/* ADMIN PRODUCTS */}
+
+                    <Route
+                        path="/admin/products"
+                        element={
+                            <AdminRoute>
+                                <AdminProducts />
+                            </AdminRoute>
+                        }
+                    />
+
+                </Routes>
+
+
+                {/* BOTTOM NAVIGATION */}
+
+                {location.pathname !== "/login" &&
+                    location.pathname !== "/signup" &&
+                    location.pathname !== "/profile" && (
+
+                        <BottomNav
+                            search={search}
+                            setSearch={setSearch}
+                            searchOpen={searchOpen}
+                            setSearchOpen={setSearchOpen}
+                            category={category}
+                            setCategory={setCategory}
+                            categories={categories}
+                            chatOpen={chatOpen}
+                        />
+
+                    )}
+
+            </div>
+
+        </div>
+
+    );
+
 }
 
 export default App;

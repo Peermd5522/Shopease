@@ -1,26 +1,28 @@
-import { createContext, useEffect, useState } from "react";
 
+import { createContext, useState } from "react";
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
 
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-
-        const storedToken = localStorage.getItem("token");
+    const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user");
 
-        if (storedToken && storedUser) {
-            setToken(storedToken);
-            setUser(JSON.parse(storedUser));
+        if (!storedUser) return null;
+
+        try {
+            return JSON.parse(storedUser);
+        } catch {
+            return null;
         }
+    });
 
-        setLoading(false);
+    const [token, setToken] = useState(() => {
+        return localStorage.getItem("token") || null;
+    });
 
-    }, []);
+    const [loading] = useState(false);
 
     return (
         <AuthContext.Provider

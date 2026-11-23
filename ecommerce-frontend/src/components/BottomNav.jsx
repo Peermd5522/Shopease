@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import {
     Tag,
@@ -10,60 +11,37 @@ import {
     X
 } from "lucide-react";
 
-import {
-    useLocation,
-    useNavigate
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "../styles/BottomNav.css";
-
 
 function BottomNav({
     categories,
     category,
     setCategory,
     search,
-    setSearch
+    setSearch,
+    chatOpen
 }) {
-
     const navigate = useNavigate();
-    const location = useLocation();
 
 
-    /* =====================================================
-       STATE
-    ===================================================== */
+    /* STATE */
 
-    const [activeTab, setActiveTab] =
-        useState("home");
+    const [activeTab, setActiveTab] = useState("home");
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [moreOpen, setMoreOpen] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
-    const [searchOpen, setSearchOpen] =
-        useState(false);
+    /* REFS */
 
-    const [moreOpen, setMoreOpen] =
-        useState(false);
+    const searchInputRef = useRef(null);
+    const navRef = useRef(null);
+    const indicatorRef = useRef(null);
+    const dragStartRef = useRef(null);
+    const didDragRef = useRef(false);
 
-    const [isDragging, setIsDragging] =
-        useState(false);
-
-
-    /* =====================================================
-       REFS
-    ===================================================== */
-
-    const searchInputRef =
-        useRef(null);
-
-    const navRef =
-        useRef(null);
-
-    const indicatorRef =
-        useRef(null);
-
-
-    /* =====================================================
-       TABS
-    ===================================================== */
+    /* TABS */
 
     const tabs = [
         "offer",
@@ -74,61 +52,25 @@ function BottomNav({
     ];
 
 
-    /* =====================================================
-       ACTIVE TAB FROM URL
-    ===================================================== */
+    /* SEARCH AUTO FOCUS */
 
     useEffect(() => {
-
-        if (location.pathname === "/home") {
-
-            setActiveTab("home");
-
-        }
-
-    }, [location.pathname]);
-
-
-    /* =====================================================
-       SEARCH AUTO FOCUS
-    ===================================================== */
-
-    useEffect(() => {
-
-        if (
-            searchOpen &&
-            searchInputRef.current
-        ) {
-
+        if (searchOpen && searchInputRef.current) {
             searchInputRef.current.focus();
-
         }
-
     }, [searchOpen]);
 
-
-    /* =====================================================
-       CLOSE MORE WHEN CLICKING OUTSIDE
-    ===================================================== */
+    /* CLOSE MORE WHEN CLICKING OUTSIDE */
 
     useEffect(() => {
-
         const handleOutsideClick = (event) => {
+            if (!moreOpen) return;
 
-            if (!moreOpen) {
-                return;
-            }
+            const morePanel = document.querySelector(
+                ".bottom-more-panel"
+            );
 
-
-            const morePanel =
-                document.querySelector(
-                    ".bottom-more-panel"
-                );
-
-
-            const bottomNav =
-                navRef.current;
-
+            const bottomNav = navRef.current;
 
             if (
                 morePanel &&
@@ -136,574 +78,347 @@ function BottomNav({
                 bottomNav &&
                 !bottomNav.contains(event.target)
             ) {
-
                 setMoreOpen(false);
-
                 setActiveTab("home");
-
             }
-
         };
-
 
         document.addEventListener(
             "pointerdown",
             handleOutsideClick
         );
 
-
         return () => {
-
             document.removeEventListener(
                 "pointerdown",
                 handleOutsideClick
             );
-
         };
-
     }, [moreOpen]);
 
-
-    /* =====================================================
-       SEARCH
-    ===================================================== */
+    /* SEARCH */
 
     const handleSearch = () => {
-
         setMoreOpen(false);
-
         setActiveTab("search");
-
         setSearchOpen(true);
-
     };
-
 
     const closeSearch = () => {
-
         setSearchOpen(false);
-
         setActiveTab("home");
-
     };
 
-
-    /* =====================================================
-       MORE
-    ===================================================== */
+    /* MORE */
 
     const handleMore = () => {
-
         setSearchOpen(false);
 
         setMoreOpen((previous) => {
-
-            const nextState =
-                !previous;
-
+            const nextState = !previous;
 
             setActiveTab(
-                nextState
-                    ? "more"
-                    : "home"
+                nextState ? "more" : "home"
             );
 
-
             return nextState;
-
         });
-
     };
 
-
-    /* =====================================================
-       HOME
-    ===================================================== */
+    /* HOME */
 
     const handleHome = () => {
-
         setSearchOpen(false);
-
         setMoreOpen(false);
-
         setActiveTab("home");
-
         navigate("/home");
-
     };
 
-
-    /* =====================================================
-       CATEGORIES
-    ===================================================== */
+    /* CATEGORIES */
 
     const handleCategories = () => {
-
         setSearchOpen(false);
-
         setMoreOpen(false);
-
         setActiveTab("categories");
-
     };
 
-
-    /* =====================================================
-       OFFER
-    ===================================================== */
+    /* OFFER */
 
     const handleOffer = () => {
-
         setSearchOpen(false);
-
         setMoreOpen(false);
-
         setActiveTab("offer");
-
     };
 
-
-    /* =====================================================
-       SELECT TAB
-       
-       This is the important part.
-       
-       Dragging the glass onto a tab and releasing it
-       now performs the actual operation.
-    ===================================================== */
+    /* SELECT TAB */
 
     const selectTab = (tab) => {
-
-        setActiveTab(tab);
-
-
         switch (tab) {
-
             case "offer":
-
                 handleOffer();
-
                 break;
-
 
             case "categories":
-
                 handleCategories();
-
                 break;
-
 
             case "home":
-
                 handleHome();
-
                 break;
-
 
             case "search":
-
                 handleSearch();
-
                 break;
-
 
             case "more":
-
                 handleMore();
-
                 break;
-
 
             default:
-
                 break;
-
         }
-
     };
 
-
-    /* =====================================================
-       GET TAB FROM POINTER
-    ===================================================== */
+    /* GET TAB FROM POINTER */
 
     const getTabFromPointer = (clientX) => {
-
-        if (!navRef.current) {
-            return 0;
-        }
-
+        if (!navRef.current) return 0;
 
         const navRect =
             navRef.current.getBoundingClientRect();
-
 
         const padding = 7;
 
-
         const usableWidth =
-            navRect.width -
-            padding * 2;
-
+            navRect.width - padding * 2;
 
         const itemWidth =
-            usableWidth /
-            tabs.length;
-
+            usableWidth / tabs.length;
 
         const pointerX =
-            clientX -
-            navRect.left -
-            padding;
+            clientX - navRect.left - padding;
 
+        let index = Math.floor(
+            pointerX / itemWidth
+        );
 
-        let index =
-            Math.floor(
-                pointerX /
-                itemWidth
-            );
-
-
-        index =
-            Math.max(
-                0,
-                Math.min(
-                    tabs.length - 1,
-                    index
-                )
-            );
-
+        index = Math.max(
+            0,
+            Math.min(tabs.length - 1, index)
+        );
 
         return index;
-
     };
 
-
-    /* =====================================================
-       DRAG START
-    ===================================================== */
+    /* DRAG START */
 
     const handlePointerDown = (event) => {
+        if (!navRef.current || !indicatorRef.current) {
+            return;
+        }
 
         if (
-            !navRef.current ||
-            !indicatorRef.current
+            event.pointerType === "mouse" &&
+            event.button !== 0
         ) {
             return;
         }
 
+        dragStartRef.current = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            target: event.target,
+            startTab: activeTab,
+            startedOnButton: Boolean(
+                event.target.closest(".bottom-nav-item")
+            ),
+            dragging: false
+        };
 
-        event.preventDefault();
-
-
-        setIsDragging(true);
-
-
-        /*
-           Close temporary panels while dragging.
-        */
-
-        setSearchOpen(false);
-
-        setMoreOpen(false);
-
-
-        /*
-           Pointer capture keeps the glass attached
-           to the pointer even if the pointer leaves
-           the navbar.
-        */
+        didDragRef.current = false;
 
         try {
-
-            indicatorRef.current.setPointerCapture(
-                event.pointerId
-            );
-
+            event.target.setPointerCapture(event.pointerId);
         } catch {
-
             // Pointer capture unavailable.
-
         }
-
     };
 
-
-    /* =====================================================
-       DRAG MOVE
-    ===================================================== */
+    /* DRAG MOVE */
 
     const handlePointerMove = (event) => {
+        const drag = dragStartRef.current;
 
         if (
-            !isDragging ||
-            !navRef.current ||
-            !indicatorRef.current
+            !drag ||
+            drag.pointerId !== event.pointerId
         ) {
             return;
         }
 
+        const deltaX = event.clientX - drag.startX;
+        const deltaY = event.clientY - drag.startY;
+
+        if (!drag.dragging) {
+            if (Math.hypot(deltaX, deltaY) < 6) {
+                return;
+            }
+
+            drag.dragging = true;
+
+            setIsDragging(true);
+            setSearchOpen(false);
+            setMoreOpen(false);
+        }
+
+        event.preventDefault();
 
         const navRect =
             navRef.current.getBoundingClientRect();
 
-
-        const indicator =
-            indicatorRef.current;
-
+        const indicator = indicatorRef.current;
 
         const indicatorWidth =
             indicator.offsetWidth;
 
-
         const padding = 7;
 
-
-        /*
-           Keep the glass inside the navbar.
-        */
-
-        const minX =
-            padding;
-
+        const minX = padding;
 
         const maxX =
             navRect.width -
             indicatorWidth -
             padding;
 
-
-        /*
-           Pointer position.
-        */
-
         let x =
             event.clientX -
             navRect.left -
             indicatorWidth / 2;
 
-
-        x =
-            Math.max(
-                minX,
-                Math.min(
-                    maxX,
-                    x
-                )
-            );
-
-
-        /*
-           Instead of directly changing transform,
-           store the temporary X position in a CSS
-           variable.
-
-           This allows CSS to control the scale,
-           reflection and animation independently.
-        */
+        x = Math.max(
+            minX,
+            Math.min(maxX, x)
+        );
 
         indicator.style.setProperty(
             "--drag-x",
             `${x - padding}px`
         );
 
-
-        /*
-           Find which navigation item is currently
-           underneath the CENTER of the glass.
-        */
-
         const glassCenter =
-            x +
-            indicatorWidth / 2;
-
+            x + indicatorWidth / 2;
 
         const usableWidth =
-            navRect.width -
-            padding * 2;
-
+            navRect.width - padding * 2;
 
         const itemWidth =
-            usableWidth /
-            tabs.length;
+            usableWidth / tabs.length;
 
+        let index = Math.floor(
+            (glassCenter - padding) / itemWidth
+        );
 
-        let index =
-            Math.floor(
-                (glassCenter - padding) /
-                itemWidth
-            );
+        index = Math.max(
+            0,
+            Math.min(tabs.length - 1, index)
+        );
 
-
-        index =
-            Math.max(
-                0,
-                Math.min(
-                    tabs.length - 1,
-                    index
-                )
-            );
-
-
-        const currentTab =
-            tabs[index];
-
-
-        /*
-           Update the blue selected item immediately
-           while dragging.
-        */
-
-        setActiveTab(currentTab);
-
+        setActiveTab(tabs[index]);
     };
 
-
-    /* =====================================================
-       DRAG END
-    ===================================================== */
+    /* DRAG END */
 
     const handlePointerUp = (event) => {
+        const drag = dragStartRef.current;
 
         if (
-            !isDragging ||
-            !navRef.current ||
-            !indicatorRef.current
+            !drag ||
+            drag.pointerId !== event.pointerId
         ) {
             return;
         }
 
-
-        const selectedIndex =
-            getTabFromPointer(
-                event.clientX
-            );
-
-
-        const selectedTab =
-            tabs[selectedIndex];
-
-
-        /*
-           Stop dragging first.
-        */
-
-        setIsDragging(false);
-
-
-        /*
-           Release pointer capture.
-        */
+        dragStartRef.current = null;
 
         try {
-
-            indicatorRef.current.releasePointerCapture(
+            drag.target.releasePointerCapture(
                 event.pointerId
             );
-
         } catch {
-
             // Already released.
-
         }
 
-
-        /*
-           Remove temporary drag position.
-
-           CSS will now move the glass to the
-           selected tab.
-        */
-
-        indicatorRef.current.style.removeProperty(
-            "--drag-x"
-        );
-
-
-        /*
-           Perform the actual operation.
-
-           This is what makes dragging onto:
-           
-           Categories → category panel
-           Home       → /home
-           Search     → search bar
-           More       → more panel
-        */
-
-        selectTab(selectedTab);
-
-    };
-
-
-    /* =====================================================
-       DRAG CANCEL
-    ===================================================== */
-
-    const handlePointerCancel = (event) => {
-
-        if (!isDragging) {
+        if (!drag.dragging) {
             return;
         }
 
+        if (drag.startedOnButton) {
+            didDragRef.current = true;
+        }
+
+        const selectedIndex =
+            getTabFromPointer(event.clientX);
+
+        const selectedTab = tabs[selectedIndex];
 
         setIsDragging(false);
 
+        indicatorRef.current?.style.removeProperty(
+            "--drag-x"
+        );
 
-        if (indicatorRef.current) {
+        selectTab(selectedTab);
+    };
 
-            try {
+    /* DRAG CANCEL */
 
-                indicatorRef.current.releasePointerCapture(
-                    event.pointerId
-                );
+    const handlePointerCancel = (event) => {
+        const drag = dragStartRef.current;
 
-            } catch {
-
-                // Already released.
-
-            }
-
-
-            indicatorRef.current.style.removeProperty(
-                "--drag-x"
-            );
-
+        if (
+            !drag ||
+            drag.pointerId !== event.pointerId
+        ) {
+            return;
         }
 
+        dragStartRef.current = null;
 
-        /*
-           Restore the current active position.
-        */
+        setIsDragging(false);
+        setActiveTab(drag.startTab);
 
-        setActiveTab((current) => current);
+        indicatorRef.current?.style.removeProperty(
+            "--drag-x"
+        );
 
+        try {
+            drag.target.releasePointerCapture(
+                event.pointerId
+            );
+        } catch {
+            // Already released.
+        }
     };
 
-
-    /* =====================================================
-       CATEGORY SELECTION
-    ===================================================== */
+    /* CATEGORY SELECTION */
 
     const handleCategorySelect = (value) => {
-
         setCategory(value);
-
+        setMoreOpen(false);
         setActiveTab("home");
-
     };
 
-
-    /* =====================================================
-       RENDER
-    ===================================================== */
+    /* RENDER */
 
     return (
-        <>
+        <div
+            className={`bottom-nav-wrapper ${
+                chatOpen ? "bottom-nav-wrapper-hidden" : ""
+            }`}
+        >
 
-            {/* =================================================
-                CATEGORY PANEL
-            ================================================= */}
+            {/* CATEGORY PANEL */}
 
             <div
                 className={`
@@ -715,21 +430,13 @@ function BottomNav({
                     }
                 `}
             >
-
                 <div className="bottom-category-header">
-
                     <div>
-
-                        <h3>
-                            Categories
-                        </h3>
-
+                        <h3>Categories</h3>
                         <p>
                             Browse products by category
                         </p>
-
                     </div>
-
 
                     <button
                         className="bottom-panel-close"
@@ -738,125 +445,74 @@ function BottomNav({
                         }}
                         aria-label="Close categories"
                     >
-
                         <X size={20} />
-
                     </button>
-
                 </div>
 
-
                 <div className="bottom-category-list">
-
                     <button
                         className={
-                            category === "all"
-                                ? "active"
-                                : ""
+                            category === "all" ? "active" : ""
                         }
                         onClick={() =>
                             handleCategorySelect("all")
                         }
                     >
-
                         All
-
                     </button>
 
-
                     {categories.map((item) => (
-
                         <button
                             key={item}
                             className={
-                                category === item
-                                    ? "active"
-                                    : ""
+                                category === item ? "active" : ""
                             }
                             onClick={() =>
                                 handleCategorySelect(item)
                             }
                         >
-
                             {item}
-
                         </button>
-
                     ))}
-
                 </div>
-
             </div>
 
-
-            {/* =================================================
-                MORE PANEL
-            ================================================= */}
+            {/* MORE PANEL */}
 
             <div
                 className={`
                     bottom-more-panel
-                    ${
-                        moreOpen
-                            ? "more-panel-open"
-                            : ""
-                    }
+                    ${moreOpen ? "more-panel-open" : ""}
                 `}
             >
-
                 <button
                     onClick={() => {
-
                         setMoreOpen(false);
-
                         setSearchOpen(false);
-
                         setActiveTab("home");
-
                         navigate("/cart");
-
                     }}
                     aria-label="Cart"
                 >
-
                     <ShoppingBag size={22} />
-
-                    <span>
-                        Cart
-                    </span>
-
+                    <span>Cart</span>
                 </button>
-
 
                 <button
                     onClick={() => {
-
                         setMoreOpen(false);
-
                         setSearchOpen(false);
-
                         setActiveTab("home");
-
                         navigate("/wishlist");
-
                     }}
                     aria-label="Wishlist"
                 >
-
                     <Heart size={22} />
-
-                    <span>
-                        Wishlist
-                    </span>
-
+                    <span>Wishlist</span>
                 </button>
-
             </div>
 
-
-            {/* =================================================
-                SEARCH BAR
-            ================================================= */}
+            {/* SEARCH BAR */}
 
             <div
                 className={`
@@ -868,9 +524,7 @@ function BottomNav({
                     }
                 `}
             >
-
                 <Search size={21} />
-
 
                 <input
                     ref={searchInputRef}
@@ -878,240 +532,111 @@ function BottomNav({
                     placeholder="Search products..."
                     value={search}
                     onChange={(event) =>
-                        setSearch(
-                            event.target.value
-                        )
+                        setSearch(event.target.value)
                     }
                 />
-
 
                 <button
                     className="bottom-search-close"
                     onClick={closeSearch}
                     aria-label="Close search"
                 >
-
                     <X size={18} />
-
                 </button>
-
             </div>
 
-
-            {/* =================================================
-                BOTTOM NAVIGATION
-            ================================================= */}
+            {/* BOTTOM NAVIGATION */}
 
             <nav
                 ref={navRef}
-                className={`
-                    bottom-nav
-                    ${
-                        isDragging
-                            ? "nav-dragging"
-                            : ""
-                    }
-                `}
+                className={`bottom-nav ${
+                    isDragging ? "nav-dragging" : ""
+                }`}
                 data-active={activeTab}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerCancel}
+                onClickCapture={(event) => {
+                    if (didDragRef.current) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        didDragRef.current = false;
+                    }
+                }}
             >
 
-                {/* =================================================
-                    LIQUID GLASS INDICATOR
-                ================================================= */}
+                {/* LIQUID GLASS INDICATOR */}
 
                 <div
                     ref={indicatorRef}
                     className="bottom-nav-indicator"
-
-                    onPointerDown={
-                        handlePointerDown
-                    }
-
-                    onPointerMove={
-                        handlePointerMove
-                    }
-
-                    onPointerUp={
-                        handlePointerUp
-                    }
-
-                    onPointerCancel={
-                        handlePointerCancel
-                    }
-
                     aria-hidden="true"
                 />
 
-
-                {/* =================================================
-                    OFFER
-                ================================================= */}
+                {/* OFFER */}
 
                 <button
-                    className={`
-                        bottom-nav-item
-                        ${
-                            activeTab === "offer"
-                                ? "active"
-                                : ""
-                        }
-                    `}
-                    onClick={() => {
-
-                        if (isDragging) {
-                            return;
-                        }
-
-                        handleOffer();
-
-                    }}
+                    className={`bottom-nav-item ${
+                        activeTab === "offer" ? "active" : ""
+                    }`}
+                    onClick={() => handleOffer()}
                 >
-
                     <Tag size={24} />
-
-                    <span>
-                        Offer
-                    </span>
-
+                    <span>Offer</span>
                 </button>
 
-
-                {/* =================================================
-                    CATEGORIES
-                ================================================= */}
+                {/* CATEGORIES */}
 
                 <button
-                    className={`
-                        bottom-nav-item
-                        ${
-                            activeTab === "categories"
-                                ? "active"
-                                : ""
-                        }
-                    `}
-                    onClick={() => {
-
-                        if (isDragging) {
-                            return;
-                        }
-
-                        handleCategories();
-
-                    }}
+                    className={`bottom-nav-item ${
+                        activeTab === "categories" ? "active" : ""
+                    }`}
+                    onClick={() => handleCategories()}
                 >
-
                     <LayoutGrid size={24} />
-
-                    <span>
-                        Categories
-                    </span>
-
+                    <span>Categories</span>
                 </button>
 
-
-                {/* =================================================
-                    HOME
-                ================================================= */}
+                {/* HOME */}
 
                 <button
-                    className={`
-                        bottom-nav-item
-                        ${
-                            activeTab === "home"
-                                ? "active"
-                                : ""
-                        }
-                    `}
-                    onClick={() => {
-
-                        if (isDragging) {
-                            return;
-                        }
-
-                        handleHome();
-
-                    }}
+                    className={`bottom-nav-item ${
+                        activeTab === "home" ? "active" : ""
+                    }`}
+                    onClick={() => handleHome()}
                 >
-
                     <HomeIcon size={24} />
-
-                    <span>
-                        Home
-                    </span>
-
+                    <span>Home</span>
                 </button>
 
-
-                {/* =================================================
-                    SEARCH
-                ================================================= */}
+                {/* SEARCH */}
 
                 <button
-                    className={`
-                        bottom-nav-item
-                        ${
-                            activeTab === "search"
-                                ? "active"
-                                : ""
-                        }
-                    `}
-                    onClick={() => {
-
-                        if (isDragging) {
-                            return;
-                        }
-
-                        handleSearch();
-
-                    }}
+                    className={`bottom-nav-item ${
+                        activeTab === "search" ? "active" : ""
+                    }`}
+                    onClick={() => handleSearch()}
                 >
-
                     <Search size={24} />
-
-                    <span>
-                        Search
-                    </span>
-
+                    <span>Search</span>
                 </button>
 
-
-                {/* =================================================
-                    MORE
-                ================================================= */}
+                {/* MORE */}
 
                 <button
-                    className={`
-                        bottom-nav-item
-                        ${
-                            activeTab === "more"
-                                ? "active"
-                                : ""
-                        }
-                    `}
-                    onClick={() => {
-
-                        if (isDragging) {
-                            return;
-                        }
-
-                        handleMore();
-
-                    }}
+                    className={`bottom-nav-item ${
+                        activeTab === "more" ? "active" : ""
+                    }`}
+                    onClick={() => handleMore()}
                 >
-
                     <MoreHorizontal size={24} />
-
-                    <span>
-                        More
-                    </span>
-
+                    <span>More</span>
                 </button>
 
             </nav>
-
-        </>
+        </div>
     );
 }
-
 
 export default BottomNav;
