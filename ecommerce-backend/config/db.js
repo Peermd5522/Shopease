@@ -1,14 +1,25 @@
+
 const mongoose = require("mongoose");
 
 async function connectDB() {
-    try{
-        await mongoose.connect("mongodb://127.0.0.1:27017/ecommerce");
+    try {
+        const mongoURI = process.env.MONGO_URI;
 
-        console.log("MongoDb Connected");
+        console.log("MONGO_URI exists:", Boolean(mongoURI));
+        console.log("MONGO_URI protocol:", mongoURI?.split(":")[0] || "MISSING");
+
+        if (!mongoURI) {
+            throw new Error("MONGO_URI environment variable is missing");
+        }
+
+        await mongoose.connect(mongoURI);
+
+        console.log("MongoDB Atlas Connected");
+
     } catch (error) {
-
         console.log("Database Connection Failed");
-        console.log(error);
+        console.log(error.message);
+        process.exit(1);
     }
 }
 
