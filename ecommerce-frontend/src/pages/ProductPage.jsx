@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
@@ -5,53 +6,46 @@ import "../styles/ProductPage.css";
 import { API_URL } from "../config";
 
 function ProductPage(props) {
-
     const { id } = useParams();
     const navigate = useNavigate();
+
     const [product, setProduct] = useState(null);
     const [error, setError] = useState("");
 
     useEffect(() => {
-    fetch(`${API_URL}/products/${id}`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Product not found");
-            }
+        setProduct(null);
+        setError("");
 
-            return response.json();
-        })
-        .then((data) => {
-            setProduct(data);
-        })
-        .catch((error) => {
-            console.error("Error fetching product:", error);
-            setError(error.message);
-        });
+        fetch(`${API_URL}/products/${id}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Product not found");
+                }
+                return response.json();
+            })
+            .then((data) => setProduct(data))
+            .catch((error) => {
+                console.error("Error fetching product:", error);
+                setError(error.message);
+            });
     }, [id]);
 
-
-
     if (error) {
-    return (
-        <div className="product-page">
-            <h2>{error}</h2>
+        return (
+            <div className="product-page">
+                <h2>{error}</h2>
+                <button onClick={() => navigate("/")}>
+                    Back to Home
+                </button>
+            </div>
+        );
+    }
 
-            <button
-                className="back-button"
-                onClick={() => navigate("/")}
-            >
-                ← Back to Home
-            </button>
-        </div>
-    );
-}
+    if (!product) {
+        return <div className="product-page">Loading product...</div>;
+    }
 
-if (!product) {
-    return <h2>Loading...</h2>;
-}
-
-
-    const relatedProducts = props.products
+    const relatedProducts = (props.products || [])
         .filter(
             (item) =>
                 item.category === product.category &&
@@ -59,114 +53,115 @@ if (!product) {
         )
         .slice(0, 4);
 
-    return (
+    const rating = Math.max(
+        0,
+        Math.min(5, Math.round(Number(product.rating) || 0))
+    );
 
-        <div className="product-page">
+    const inStock = Number(product.stock) > 0;
+
+    return (
+        <main className="product-page">
 
             <button
-                className="back-button"
+                className="product-back-button"
                 onClick={() => navigate(-1)}
             >
                 ← Back
             </button>
 
-            <div className="product-details">
+            <section className="product-details">
 
-                {/* LEFT SIDE */}
+                {/* Product Image */}
                 <div className="product-gallery">
-
-                    <div className="product-image">
-
+                    <div className="product-main-image">
                         {product.image && (
                             <img
                                 src={product.image}
                                 alt={product.name}
                             />
                         )}
+                    </div>
+                </div>
+
+                {/* Product Information */}
+                <div className="product-description-panel">
+
+                    <p className="product-brand">
+                        {product.brand || product.category}
+                    </p>
+
+                    <h1 className="product-heading">
+                        {product.name}
+                    </h1>
+
+                    <div className="product-description-rating">
+
+                        <p className="product-detail-description">
+                            {product.description}
+                        </p>
+
+                        <div
+                            className="product-rating-stars"
+                            aria-label={`Rating ${product.rating} out of 5`}
+                        >
+                            {Array.from({ length: 5 }, (_, index) => (
+                                <span
+                                    key={index}
+                                    className={
+                                        index < rating ? "filled" : ""
+                                    }
+                                >
+                                    ★
+                                </span>
+                            ))}
+                        </div>
 
                     </div>
 
+                    <div className="product-detail-divider" />
 
+                    {/* Price and Stock */}
+                    <div className="product-price-row">
 
-                </div>
-
-                {/* RIGHT SIDE */}
-                <div className="product-info">
-
-                    <p className="brand">
-                        {product.brand}
-                    </p>
-
-                    <h1>{product.name}</h1>
-
-
-                    <div className="price-row">
-
-                        <h2 className="price">
-                            ₹{product.price}
+                        <h2 className="product-detail-price">
+                            ₹{Number(product.price).toLocaleString("en-IN")}
                         </h2>
 
-                        
+                        <p
+                            className={`product-availability ${
+                                inStock ? "available" : "unavailable"
+                            }`}
+                        >
+                            {inStock ? "● In Stock" : "Out of Stock"}
+                        </p>
 
                     </div>
 
+                    <div className="product-detail-divider" />
 
-                    <p className="stock">
-
-                        {product.stock > 0
-                            ? `✓ ${product.stock} in stock`
-                            : "Out of Stock"}
-
-                    </p>
-
-
-                    <p className="rating">
-
-                        ⭐ {product.rating}
-
-                        <span className="rating-text">
-                            / 5
-                        </span>
-                    </p>
-
-
-                    <p className="delivery">
-                        🚚 Free Delivery
-                    </p>
-
-                    <p className="returns">
-                        ↺ 30-Day Returns
-                    </p>
-
-
-                    <p className="description">
-                        {product.description}
-                    </p>
-
-                    <p className="category">
-                        Category:
-                        <strong> {product.category}</strong>
-                    </p>
-
+                    {/* Add to Bag */}
                     <button
-                        className="add-button"
+                        className="product-add-to-cart"
                         onClick={() => props.addToCart(product)}
+                        disabled={!inStock}
                     >
-                        Add
+                        {inStock ? "Add to Bag" : "Out of Stock"}
                     </button>
+
+                    <div className="product-detail-divider" />
 
                 </div>
 
-            </div>
+            </section>
 
-            <div className="related-section">
+            {/* Related Products */}
+            <section className="related-section">
 
                 <h2>Related Products</h2>
 
                 <div className="products">
-
                     {relatedProducts.map((item) => (
-
                         <ProductCard
                             key={item._id}
                             product={item}
@@ -174,15 +169,12 @@ if (!product) {
                             wishlist={props.wishlist}
                             toggleWishlist={props.toggleWishlist}
                         />
-
                     ))}
-
                 </div>
 
-            </div>
+            </section>
 
-        </div>
-
+        </main>
     );
 }
 

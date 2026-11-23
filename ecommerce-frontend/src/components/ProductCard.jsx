@@ -1,91 +1,93 @@
+
 import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
 
 function ProductCard(props) {
-
     const navigate = useNavigate();
+    const product = props.product;
 
     const isWishlisted =
-    props.wishlist?.some(
-        item => item._id === props.product._id
-    ) || false;
+        props.wishlist?.some(
+            item => item._id === product._id
+        ) || false;
 
     return (
-
         <div
             className="product-card"
-            onClick={() => navigate(`/product/${props.product._id}`)}
+            onClick={() => navigate(`/product/${product._id}`)}
         >
-
-            <button
-                className="wishlist-button"
-                onClick={(e) => {
-
-                    e.stopPropagation();
-
-                    props.toggleWishlist(props.product);
-
-                }}
-            >
-
-                {isWishlisted ? "❤️" : "🤍"}
-
-            </button>
-
             <div className="product-image">
-
                 <img
-                    src={props.product.image}
-                    alt={props.product.name}
+                    src={product.image}
+                    alt={product.name}
+                    loading="lazy"
                 />
 
+                <button
+                    className={`wishlist-button ${isWishlisted ? "active" : ""}`}
+                    aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        props.toggleWishlist(product);
+                    }}
+                >
+                    {isWishlisted ? "♥" : "♡"}
+                </button>
             </div>
 
             <div className="product-info">
 
                 <p className="product-brand">
-                    {props.product.brand}
+                    {product.brand || product.category}
                 </p>
 
-                <h3>
-                    {props.product.name}
-                </h3>
+                <div className="product-title-row">
+                    <h3>{product.name}</h3>
 
-                <p className="product-rating">
-                    ⭐ {props.product.rating}
-                </p>
+                    <div className="product-rating">
+                        <span>★</span>
+                        {Number(product.rating || 0).toFixed(1)}
+                    </div>
+                </div>
 
-                <h2 className="product-price">
-                    ₹{props.product.price}
-                </h2>
+                <div className="product-price-row">
+                    <h2 className="product-price">
+                        ₹{Number(product.price).toLocaleString("en-IN")}
+                    </h2>
 
-                <p className="product-stock">
-                    {props.product.stock > 10
-                        ? `Only ${props.product.stock} left`
-                        : "Almost Sold Out"}
-                </p>
+                    <span className="product-stock">
+                        {product.stock > 0
+                            ? "In Stock"
+                            : "Out of Stock"}
+                    </span>
+                </div>
+
+                <div className="product-actions">
+                    <span
+                        className="view-details"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/product/${product._id}`);
+                        }}
+                    >
+                        View Details ↗
+                    </span>
+
+                    <button
+                        className="add-button"
+                        disabled={product.stock <= 0}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            props.addToCart(product);
+                        }}
+                    >
+                        Add +
+                    </button>
+                </div>
 
             </div>
-
-            <button
-                className="add-button"
-                onClick={(e) => {
-
-                    e.stopPropagation();
-
-                    props.addToCart(props.product);
-
-                }}
-            >
-
-                Add
-
-            </button>
-
         </div>
-
     );
-
 }
 
 export default ProductCard;
