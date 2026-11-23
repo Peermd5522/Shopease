@@ -1,10 +1,15 @@
 
 import { Link } from "react-router-dom";
-import { User, Sparkles } from "lucide-react";
+import { User, Sparkles, Sun, Moon } from "lucide-react";
 import Chatbot from "./Chatbot";
 import "../styles/Navbar.css";
 
-function Navbar({ chatOpen, setChatOpen }) {
+function Navbar({
+    chatOpen,
+    setChatOpen,
+    theme,
+    toggleTheme
+}) {
 
     return (
         <>
@@ -16,20 +21,41 @@ function Navbar({ chatOpen, setChatOpen }) {
 
                 <div className="navbar-actions">
 
+                    {/* PROFILE */}
+
                     <Link
                         to="/profile"
                         className="navbar-profile"
                         aria-label="Profile"
+                        title="Profile"
                     >
                         <User size={22} />
                     </Link>
+
+                    {/* AI CHATBOT */}
 
                     <button
                         className="navbar-assistant"
                         onClick={() => setChatOpen(true)}
                         aria-label="Open AI assistant"
+                        title="AI Assistant"
                     >
                         <Sparkles size={22} />
+                    </button>
+
+                    {/* THEME TOGGLE */}
+
+                    <button
+                        className="navbar-theme"
+                        onClick={toggleTheme}
+                        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                        title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
+                    >
+                        {theme === "light" ? (
+                            <Moon size={22} />
+                        ) : (
+                            <Sun size={22} />
+                        )}
                     </button>
 
                 </div>

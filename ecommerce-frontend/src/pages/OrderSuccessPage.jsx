@@ -22,7 +22,7 @@ function OrderSuccessPage() {
                 </p>
 
                 <Link
-                    to="/"
+                    to="/home"
                     className="continue-shopping"
                 >
                     Continue Shopping

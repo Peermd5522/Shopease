@@ -1,7 +1,9 @@
 
 /* =========================================================
-   SHOPEASE — APPLE LIQUID GLASS BOTTOM NAVIGATION
+   SHOPEASE — APPLE STYLE BOTTOM NAVIGATION
+   LIGHT + DARK THEME
    ========================================================= */
+
 
 /* =========================================================
    MAIN NAVIGATION
@@ -24,56 +26,23 @@
 
     padding: var(--nav-padding);
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.48),
-            rgba(255, 255, 255, 0.19) 50%,
-            rgba(255, 255, 255, 0.32)
-        );
-
-    backdrop-filter: blur(32px) saturate(200%);
-    -webkit-backdrop-filter: blur(32px) saturate(200%);
-
-    border: 1px solid rgba(255, 255, 255, 0.65);
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 999px;
 
-    box-shadow:
-        0 14px 45px rgba(0, 0, 0, 0.11),
-        0 3px 10px rgba(0, 0, 0, 0.045),
-        inset 0 1.5px 1px rgba(255, 255, 255, 0.85),
-        inset 0 -1px 1px rgba(255, 255, 255, 0.22);
+    box-shadow: var(--shadow);
 
     z-index: 2000;
     isolation: isolate;
 
-    /* Pointer tracking */
     touch-action: none;
 
     transition:
         transform 0.4s cubic-bezier(.16, 1, .3, 1),
         opacity 0.3s ease,
-        visibility 0.3s ease;
-}
-
-
-/* =========================================================
-   DARK NAVIGATION
-   ========================================================= */
-
-.dark .bottom-nav {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(55, 55, 62, 0.72),
-            rgba(28, 28, 34, 0.56)
-        );
-
-    border-color: rgba(255, 255, 255, 0.17);
-
-    box-shadow:
-        0 14px 45px rgba(0, 0, 0, 0.42),
-        inset 0 1px 1px rgba(255, 255, 255, 0.17);
+        visibility 0.3s ease,
+        background 0.25s ease,
+        border-color 0.25s ease;
 }
 
 
@@ -99,10 +68,9 @@
     outline: none;
     background: transparent;
 
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
 
     font-family: inherit;
-
     cursor: pointer;
 
     user-select: none;
@@ -114,9 +82,6 @@
         color 0.22s ease,
         transform 0.28s cubic-bezier(.22, 1, .36, 1);
 }
-
-
-/* ICON */
 
 .bottom-nav-item svg {
     width: 24px;
@@ -130,9 +95,6 @@
         transform 0.30s cubic-bezier(.22, 1, .36, 1);
 }
 
-
-/* LABEL */
-
 .bottom-nav-item span {
     font-size: 11px;
     font-weight: 500;
@@ -145,34 +107,26 @@
         font-weight 0.22s ease;
 }
 
-
-/* =========================================================
-   ACTIVE TAB
-   ========================================================= */
-
 .bottom-nav-item.active {
-    color: #007aff;
+    color: var(--primary);
     transform: scale(1.04);
 }
 
 .bottom-nav-item.active svg {
-    color: #007aff;
-    stroke: #007aff;
+    color: var(--primary);
+    stroke: var(--primary);
     stroke-width: 2.5;
     filter: none;
 }
 
 .bottom-nav-item.active span {
-    color: #007aff;
+    color: var(--primary);
     font-weight: 650;
     text-shadow: none;
 }
 
-
-/* HOVER */
-
 .bottom-nav-item:hover {
-    color: #007aff;
+    color: var(--primary);
 }
 
 .bottom-nav-item:hover svg {
@@ -181,7 +135,7 @@
 
 
 /* =========================================================
-   LIQUID GLASS PRISM INDICATOR
+   ACTIVE INDICATOR
    ========================================================= */
 
 .bottom-nav-indicator {
@@ -197,36 +151,14 @@
 
     border-radius: 999px;
 
-    background:
-        radial-gradient(
-            ellipse at 28% 5%,
-            rgba(255, 255, 255, 0.92),
-            transparent 52%
-        ),
-        linear-gradient(
-            145deg,
-            rgba(255, 255, 255, 0.48),
-            rgba(255, 255, 255, 0.16) 48%,
-            rgba(220, 235, 255, 0.27)
-        );
+    background: var(--surface);
+    border: 1px solid var(--border);
 
-    backdrop-filter: blur(22px) saturate(230%);
-    -webkit-backdrop-filter: blur(22px) saturate(230%);
-
-    border: 1px solid rgba(255, 255, 255, 0.78);
-
-    box-shadow:
-        inset 0 1.5px 1px rgba(255, 255, 255, 0.95),
-        inset 0 -1px 1px rgba(255, 255, 255, 0.35),
-        inset 1px 0 1px rgba(255, 255, 255, 0.35),
-        0 5px 16px rgba(30, 50, 90, 0.09),
-        0 1px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: none;
 
     z-index: 1;
 
     cursor: grab;
-
-    /* Events are handled by the navigation container */
     pointer-events: none;
     touch-action: none;
 
@@ -240,78 +172,18 @@
         top 0.25s ease,
         height 0.25s ease,
         box-shadow 0.3s ease,
-        filter 0.3s ease;
+        filter 0.3s ease,
+        background 0.25s ease,
+        border-color 0.25s ease;
 }
 
-
-/* TOP GLASS REFLECTION */
-
-.bottom-nav-indicator::before {
-    content: "";
-
-    position: absolute;
-
-    top: 1px;
-    left: 7%;
-
-    width: 86%;
-    height: 44%;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.85),
-            rgba(255, 255, 255, 0.22) 55%,
-            transparent
-        );
-
-    filter: blur(1px);
-    opacity: 0.8;
-
-    pointer-events: none;
-}
-
-
-/* PRISM REFRACTION */
-
+.bottom-nav-indicator::before,
 .bottom-nav-indicator::after {
-    content: "";
-
-    position: absolute;
-    inset: 0;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            115deg,
-            transparent 12%,
-            rgba(120, 190, 255, 0.16) 28%,
-            rgba(210, 155, 255, 0.15) 43%,
-            rgba(255, 190, 210, 0.13) 57%,
-            rgba(150, 225, 255, 0.17) 72%,
-            transparent 90%
-        );
-
-    background-size: 220% 100%;
-    background-position: 100% 50%;
-
-    opacity: 0.7;
-    mix-blend-mode: screen;
-
-    pointer-events: none;
-
-    transition:
-        background-position 0.65s ease,
-        opacity 0.3s ease;
+    display: none;
 }
 
 
-/* =========================================================
-   PRISM POSITION
-   ========================================================= */
+/* INDICATOR POSITION */
 
 .bottom-nav[data-active="offer"] .bottom-nav-indicator {
     transform: translateX(0);
@@ -334,9 +206,7 @@
 }
 
 
-/* =========================================================
-   DRAGGING EFFECT
-   ========================================================= */
+/* DRAGGING */
 
 .bottom-nav.nav-dragging .bottom-nav-indicator {
     transform:
@@ -346,8 +216,7 @@
     top: 4px;
     height: 68px;
 
-    filter: saturate(1.3) brightness(1.06);
-
+    filter: brightness(0.97);
     cursor: grabbing;
 
     transition:
@@ -355,63 +224,6 @@
         height 0.18s ease,
         box-shadow 0.18s ease,
         filter 0.18s ease;
-}
-
-.bottom-nav.nav-dragging .bottom-nav-indicator::after {
-    background-position: 0% 50%;
-    opacity: 1;
-}
-
-
-/* =========================================================
-   DARK MODE PRISM
-   ========================================================= */
-
-.dark .bottom-nav-indicator {
-    background:
-        radial-gradient(
-            ellipse at 28% 5%,
-            rgba(255, 255, 255, 0.3),
-            transparent 55%
-        ),
-        linear-gradient(
-            145deg,
-            rgba(255, 255, 255, 0.2),
-            rgba(255, 255, 255, 0.055),
-            rgba(110, 150, 210, 0.13)
-        );
-
-    border-color: rgba(255, 255, 255, 0.28);
-
-    box-shadow:
-        inset 0 1px 1px rgba(255, 255, 255, 0.4),
-        inset 0 -1px 1px rgba(255, 255, 255, 0.08),
-        0 6px 22px rgba(0, 0, 0, 0.32);
-}
-
-.dark .bottom-nav-indicator::after {
-    opacity: 0.5;
-}
-
-.dark .bottom-nav.nav-dragging
-.bottom-nav-indicator {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255, 255, 255, 0.25),
-            rgba(255, 255, 255, 0.07)
-        );
-}
-
-.dark .bottom-nav-item.active,
-.dark .bottom-nav-item.active svg,
-.dark .bottom-nav-item.active span {
-    color: #64b5ff;
-}
-
-.dark .bottom-nav-item.active svg {
-    stroke: #64b5ff;
-    filter: none;
 }
 
 
@@ -443,29 +255,23 @@
     opacity: 0;
     pointer-events: none;
 
-    background: rgba(255, 255, 255, 0.48);
-
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-
-    border: 1px solid rgba(255, 255, 255, 0.52);
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 999px;
 
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.10),
-        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    box-shadow: var(--shadow);
 
     z-index: 2100;
 
     transition:
         transform 0.52s cubic-bezier(.22, 1.2, .36, 1),
-        opacity 0.22s ease;
+        opacity 0.22s ease,
+        background 0.25s ease,
+        border-color 0.25s ease;
 }
 
 .bottom-search-open {
-    transform:
-        translateX(-50%)
-        scaleX(1);
+    transform: translateX(-50%) scaleX(1);
 
     opacity: 1;
     pointer-events: auto;
@@ -473,7 +279,7 @@
 
 .bottom-search-bar > svg {
     flex-shrink: 0;
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
 }
 
 .bottom-search-bar input {
@@ -485,13 +291,13 @@
 
     background: transparent;
 
-    color: var(--color-text);
+    color: var(--text);
     font-family: inherit;
     font-size: 16px;
 }
 
 .bottom-search-bar input::placeholder {
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
 }
 
 .bottom-search-close {
@@ -505,8 +311,8 @@
     border: none;
     border-radius: 50%;
 
-    background: rgba(0, 0, 0, 0.055);
-    color: var(--color-text);
+    background: var(--surface);
+    color: var(--text);
 
     cursor: pointer;
 
@@ -517,93 +323,134 @@
 
 .bottom-search-close:hover {
     transform: scale(1.08);
-    background: rgba(0, 0, 0, 0.09);
-}
-
-.dark .bottom-search-bar {
-    background: rgba(25, 25, 28, 0.52);
-
-    border-color: rgba(255, 255, 255, 0.11);
-
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.38),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: var(--surface-elevated);
 }
 
 
 /* =========================================================
-   CATEGORY PANEL
+   HORIZONTAL CATEGORY BAR
+   OCCUPIES THE EXACT NAVBAR POSITION
    ========================================================= */
 
 .bottom-category-panel {
     position: fixed;
 
     left: 50%;
-    bottom: 108px;
+    bottom: 22px;
 
     transform:
         translateX(-50%)
-        translateY(20px)
-        scale(0.96);
+        scaleX(0.25);
+
+    transform-origin: center;
 
     width: min(560px, calc(100% - 32px));
+    height: 76px;
 
-    padding: 22px;
+    display: flex;
+    align-items: center;
 
-    background: rgba(255, 255, 255, 0.52);
+    gap: 8px;
+    padding: 7px;
 
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
 
-    border: 1px solid rgba(255, 255, 255, 0.56);
-    border-radius: 38px;
-
-    box-shadow:
-        0 18px 50px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    box-shadow: var(--shadow);
 
     opacity: 0;
     pointer-events: none;
 
-    z-index: 1900;
+    z-index: 2100;
 
     transition:
-        transform 0.45s cubic-bezier(.22, 1.2, .36, 1),
-        opacity 0.24s ease;
+        transform 0.52s cubic-bezier(.22, 1.2, .36, 1),
+        opacity 0.22s ease,
+        background 0.25s ease,
+        border-color 0.25s ease;
 }
 
 .category-panel-open {
     transform:
         translateX(-50%)
-        translateY(0)
-        scale(1);
+        scaleX(1);
 
     opacity: 1;
     pointer-events: auto;
 }
 
-.bottom-category-header {
+
+/* CATEGORY OPTIONS — HORIZONTAL SCROLL */
+
+.bottom-category-list {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 
-    margin-bottom: 18px;
+    gap: 8px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 0 2px;
+
+    white-space: nowrap;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-.bottom-category-header h3 {
-    margin: 0 0 3px;
-    font-size: 20px;
+.bottom-category-list::-webkit-scrollbar {
+    display: none;
 }
 
-.bottom-category-header p {
-    margin: 0;
+.bottom-category-list button {
+    flex: 0 0 auto;
+
+    padding: 10px 15px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: var(--surface);
+    color: var(--text);
+
+    font-family: inherit;
     font-size: 13px;
-    color: var(--color-text-secondary);
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
 }
 
-.bottom-panel-close {
-    width: 34px;
-    height: 34px;
+.bottom-category-list button:hover {
+    transform: translateY(-1px);
+    background: var(--surface-elevated);
+}
+
+.bottom-category-list button.active {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+
+/* CATEGORY CLOSE BUTTON */
+
+.bottom-category-close {
+    flex: 0 0 48px;
+
+    width: 48px;
+    height: 48px;
 
     display: flex;
     align-items: center;
@@ -612,67 +459,21 @@
     border: none;
     border-radius: 50%;
 
-    background: rgba(0, 0, 0, 0.055);
-    color: var(--color-text);
+    background: var(--surface);
+    color: var(--text);
 
     cursor: pointer;
 
     transition:
         transform 0.25s ease,
-        background 0.25s ease;
-}
-
-.bottom-panel-close:hover {
-    transform: scale(1.08);
-    background: rgba(0, 0, 0, 0.09);
-}
-
-.bottom-category-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-}
-
-.bottom-category-list button {
-    padding: 9px 14px;
-
-    border: none;
-    border-radius: 999px;
-
-    background: rgba(0, 0, 0, 0.045);
-    color: var(--color-text);
-
-    font-family: inherit;
-    font-size: 13px;
-
-    cursor: pointer;
-
-    transition:
         background 0.25s ease,
-        transform 0.25s ease;
+        color 0.25s ease;
 }
 
-.bottom-category-list button:hover {
-    transform: translateY(-1px);
-}
-
-.bottom-category-list button.active {
-    background: var(--color-text);
-    color: white;
-}
-
-.dark .bottom-category-panel {
-    background: rgba(25, 25, 28, 0.54);
-    border-color: rgba(255, 255, 255, 0.11);
-}
-
-.dark .bottom-category-list button {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.dark .bottom-category-list button.active {
-    background: white;
-    color: #1d1d1f;
+.bottom-category-close:hover {
+    transform: scale(1.08);
+    background: var(--surface-elevated);
+    color: var(--primary);
 }
 
 
@@ -702,17 +503,11 @@
     gap: 12px;
     padding: 7px;
 
-    background: rgba(255, 255, 255, 0.50);
-
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 999px;
 
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.10),
-        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    box-shadow: var(--shadow);
 
     opacity: 0;
     pointer-events: none;
@@ -721,7 +516,9 @@
 
     transition:
         transform 0.52s cubic-bezier(.22, 1.2, .36, 1),
-        opacity 0.22s ease;
+        opacity 0.22s ease,
+        background 0.25s ease,
+        border-color 0.25s ease;
 }
 
 .more-panel-open {
@@ -750,7 +547,7 @@
     border-radius: 999px;
 
     background: transparent;
-    color: var(--color-text);
+    color: var(--text);
 
     font-family: inherit;
     cursor: pointer;
@@ -761,7 +558,7 @@
 }
 
 .bottom-more-panel button:hover {
-    background: rgba(0, 0, 0, 0.045);
+    background: var(--surface);
     transform: translateY(-2px);
 }
 
@@ -776,21 +573,9 @@
     line-height: 1;
 }
 
-.dark .bottom-more-panel {
-    background: rgba(25, 25, 28, 0.53);
-    border-color: rgba(255, 255, 255, 0.11);
-
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.38);
-}
-
-.dark .bottom-more-panel button:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
 
 /* =========================================================
-   CHATBOT OPEN — HIDE ENTIRE BOTTOM NAVIGATION
+   CHATBOT OPEN — HIDE NAVIGATION
    ========================================================= */
 
 .bottom-nav-wrapper {
@@ -878,17 +663,14 @@
 
     .bottom-category-panel {
         left: 50%;
-        bottom: 100px;
+        bottom: 16px;
 
         width: calc(100% - 24px);
+        height: 72px;
 
-        max-height: calc(100vh - 130px);
+        border-radius: 28px;
 
-        overflow-y: auto;
-
-        border-radius: 32px;
-
-        z-index: 9000;
+        z-index: 10000;
     }
 
     .bottom-more-panel {
@@ -979,17 +761,32 @@
 
     .bottom-category-panel {
         left: 50%;
-        bottom: 88px;
+        bottom: 10px;
 
         width: calc(100% - 18px);
+        height: 68px;
 
-        max-height: calc(100vh - 110px);
+        padding: 6px;
 
-        padding: 18px;
+        border-radius: 24px;
 
-        border-radius: 28px;
+        z-index: 10000;
+    }
 
-        overflow-y: auto;
+    .bottom-category-list {
+        gap: 6px;
+    }
+
+    .bottom-category-list button {
+        padding: 9px 12px;
+        font-size: 11px;
+    }
+
+    .bottom-category-close {
+        flex-basis: 42px;
+
+        width: 42px;
+        height: 42px;
     }
 
     .bottom-more-panel {

@@ -1,10 +1,16 @@
 
-/* WISHLIST PAGE */
+/* =================================
+   WISHLIST PAGE
+================================= */
 
 .wishlist-page {
     max-width: 1400px;
+    min-height: 70vh;
     margin: 50px auto;
     padding: 0 50px;
+    color: var(--text);
+    background: var(--bg);
+    transition: background 0.35s ease, color 0.35s ease;
 }
 
 .wishlist-page h1 {
@@ -19,7 +25,9 @@
     font-size: 18px;
 }
 
-/* BACK BUTTON */
+/* =================================
+   BACK BUTTON
+================================= */
 
 .back-button {
     border: none;
@@ -28,14 +36,16 @@
     font-size: 16px;
     cursor: pointer;
     margin-bottom: 40px;
-    transition: color .3s ease;
+    transition: color 0.3s ease;
 }
 
 .back-button:hover {
-    color: var(--text);
+    color: var(--primary);
 }
 
-/* TABLET */
+/* =================================
+   TABLET
+================================= */
 
 @media (max-width: 1024px) {
     .wishlist-page {
@@ -44,7 +54,9 @@
     }
 }
 
-/* MOBILE */
+/* =================================
+   MOBILE
+================================= */
 
 @media (max-width: 768px) {
     .wishlist-page {

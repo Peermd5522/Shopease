@@ -1,7 +1,7 @@
 
 /* =========================================================
    NAVBAR
-========================================================= */
+   ========================================================= */
 
 .navbar {
     position: sticky;
@@ -34,23 +34,23 @@
 
 /* =========================================================
    SHARED LIQUID GLASS
-========================================================= */
+   ========================================================= */
 
 .navbar-store,
 .navbar-profile,
-.navbar-assistant {
+.navbar-assistant,
+.navbar-theme {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255, 255, 255, 0.88),
-            rgba(255, 255, 255, 0.48) 45%,
-            rgba(255, 255, 255, 0.65)
-        );
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.88),
+        rgba(255, 255, 255, 0.48) 45%,
+        rgba(255, 255, 255, 0.65)
+    );
 
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
@@ -66,12 +66,11 @@
         background 0.3s ease,
         box-shadow 0.3s ease,
         transform 0.25s ease;
-
 }
 
 /* =========================================================
    STORE
-========================================================= */
+   ========================================================= */
 
 .navbar-store {
     height: 44px;
@@ -90,11 +89,12 @@
 }
 
 /* =========================================================
-   PROFILE AND AI BUTTONS
-========================================================= */
+   PROFILE, AI AND THEME BUTTONS
+   ========================================================= */
 
 .navbar-profile,
-.navbar-assistant {
+.navbar-assistant,
+.navbar-theme {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -112,8 +112,15 @@
     padding: 0;
 }
 
+.navbar-theme {
+    color: var(--color-text);
+    cursor: pointer;
+    padding: 0;
+}
+
 .navbar-profile svg,
-.navbar-assistant svg {
+.navbar-assistant svg,
+.navbar-theme svg {
     width: 20px;
     height: 20px;
     stroke-width: 2;
@@ -121,11 +128,12 @@
 
 /* =========================================================
    GLASS HIGHLIGHT
-========================================================= */
+   ========================================================= */
 
 .navbar-store::before,
 .navbar-profile::before,
-.navbar-assistant::before {
+.navbar-assistant::before,
+.navbar-theme::before {
     content: "";
     position: absolute;
     inset: 1px;
@@ -141,11 +149,12 @@
 
 /* =========================================================
    HOVER
-========================================================= */
+   ========================================================= */
 
 .navbar-store:hover,
 .navbar-profile:hover,
-.navbar-assistant:hover {
+.navbar-assistant:hover,
+.navbar-theme:hover {
     transform: translateY(-2px);
 
     box-shadow:
@@ -157,13 +166,18 @@
     color: #0066dd;
 }
 
+.navbar-theme:hover {
+    color: #007aff;
+}
+
 /* =========================================================
    DARK MODE
-========================================================= */
+   ========================================================= */
 
 .dark .navbar-store,
 .dark .navbar-profile,
-.dark .navbar-assistant {
+.dark .navbar-assistant,
+.dark .navbar-theme {
     background: linear-gradient(
         145deg,
         rgba(65, 65, 70, 0.82),
@@ -179,7 +193,8 @@
 }
 
 .dark .navbar-store a,
-.dark .navbar-profile {
+.dark .navbar-profile,
+.dark .navbar-theme {
     color: var(--color-text);
 }
 
@@ -187,9 +202,13 @@
     color: #58a6ff;
 }
 
+.dark .navbar-theme:hover {
+    color: #ffd166;
+}
+
 /* =========================================================
    TABLET
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 1024px) {
     .navbar {
@@ -200,7 +219,7 @@
 
 /* =========================================================
    MOBILE
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 768px) {
     .navbar {
@@ -210,7 +229,8 @@
 
     .navbar-store,
     .navbar-profile,
-    .navbar-assistant {
+    .navbar-assistant,
+    .navbar-theme {
         height: 42px;
     }
 
@@ -219,7 +239,8 @@
     }
 
     .navbar-profile,
-    .navbar-assistant {
+    .navbar-assistant,
+    .navbar-theme {
         width: 42px;
     }
 
@@ -228,7 +249,8 @@
     }
 
     .navbar-profile svg,
-    .navbar-assistant svg {
+    .navbar-assistant svg,
+    .navbar-theme svg {
         width: 19px;
         height: 19px;
     }
@@ -236,7 +258,7 @@
 
 /* =========================================================
    SMALL PHONES
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 480px) {
     .navbar {
@@ -249,7 +271,8 @@
 
     .navbar-store,
     .navbar-profile,
-    .navbar-assistant {
+    .navbar-assistant,
+    .navbar-theme {
         height: 40px;
     }
 
@@ -258,7 +281,8 @@
     }
 
     .navbar-profile,
-    .navbar-assistant {
+    .navbar-assistant,
+    .navbar-theme {
         width: 40px;
     }
 
@@ -267,7 +291,8 @@
     }
 
     .navbar-profile svg,
-    .navbar-assistant svg {
+    .navbar-assistant svg,
+    .navbar-theme svg {
         width: 18px;
         height: 18px;
     }

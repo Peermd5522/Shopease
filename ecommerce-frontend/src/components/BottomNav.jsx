@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
-
 import "../styles/BottomNav.css";
 
 function BottomNav({
@@ -25,13 +24,14 @@ function BottomNav({
 }) {
     const navigate = useNavigate();
 
-
     /* STATE */
 
     const [activeTab, setActiveTab] = useState("home");
     const [searchOpen, setSearchOpen] = useState(false);
     const [moreOpen, setMoreOpen] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+
+    const categoryOpen = activeTab === "categories";
 
     /* REFS */
 
@@ -50,7 +50,6 @@ function BottomNav({
         "search",
         "more"
     ];
-
 
     /* SEARCH AUTO FOCUS */
 
@@ -83,10 +82,7 @@ function BottomNav({
             }
         };
 
-        document.addEventListener(
-            "pointerdown",
-            handleOutsideClick
-        );
+        document.addEventListener("pointerdown", handleOutsideClick);
 
         return () => {
             document.removeEventListener(
@@ -117,9 +113,7 @@ function BottomNav({
         setMoreOpen((previous) => {
             const nextState = !previous;
 
-            setActiveTab(
-                nextState ? "more" : "home"
-            );
+            setActiveTab(nextState ? "more" : "home");
 
             return nextState;
         });
@@ -139,7 +133,14 @@ function BottomNav({
     const handleCategories = () => {
         setSearchOpen(false);
         setMoreOpen(false);
-        setActiveTab("categories");
+
+        setActiveTab((previous) =>
+            previous === "categories" ? "home" : "categories"
+        );
+    };
+
+    const closeCategories = () => {
+        setActiveTab("home");
     };
 
     /* OFFER */
@@ -184,28 +185,16 @@ function BottomNav({
     const getTabFromPointer = (clientX) => {
         if (!navRef.current) return 0;
 
-        const navRect =
-            navRef.current.getBoundingClientRect();
-
+        const navRect = navRef.current.getBoundingClientRect();
         const padding = 7;
+        const usableWidth = navRect.width - padding * 2;
+        const itemWidth = usableWidth / tabs.length;
 
-        const usableWidth =
-            navRect.width - padding * 2;
+        const pointerX = clientX - navRect.left - padding;
 
-        const itemWidth =
-            usableWidth / tabs.length;
+        let index = Math.floor(pointerX / itemWidth);
 
-        const pointerX =
-            clientX - navRect.left - padding;
-
-        let index = Math.floor(
-            pointerX / itemWidth
-        );
-
-        index = Math.max(
-            0,
-            Math.min(tabs.length - 1, index)
-        );
+        index = Math.max(0, Math.min(tabs.length - 1, index));
 
         return index;
     };
@@ -274,55 +263,35 @@ function BottomNav({
 
         event.preventDefault();
 
-        const navRect =
-            navRef.current.getBoundingClientRect();
-
+        const navRect = navRef.current.getBoundingClientRect();
         const indicator = indicatorRef.current;
-
-        const indicatorWidth =
-            indicator.offsetWidth;
+        const indicatorWidth = indicator.offsetWidth;
 
         const padding = 7;
-
         const minX = padding;
-
-        const maxX =
-            navRect.width -
-            indicatorWidth -
-            padding;
+        const maxX = navRect.width - indicatorWidth - padding;
 
         let x =
             event.clientX -
             navRect.left -
             indicatorWidth / 2;
 
-        x = Math.max(
-            minX,
-            Math.min(maxX, x)
-        );
+        x = Math.max(minX, Math.min(maxX, x));
 
         indicator.style.setProperty(
             "--drag-x",
             `${x - padding}px`
         );
 
-        const glassCenter =
-            x + indicatorWidth / 2;
-
-        const usableWidth =
-            navRect.width - padding * 2;
-
-        const itemWidth =
-            usableWidth / tabs.length;
+        const glassCenter = x + indicatorWidth / 2;
+        const usableWidth = navRect.width - padding * 2;
+        const itemWidth = usableWidth / tabs.length;
 
         let index = Math.floor(
             (glassCenter - padding) / itemWidth
         );
 
-        index = Math.max(
-            0,
-            Math.min(tabs.length - 1, index)
-        );
+        index = Math.max(0, Math.min(tabs.length - 1, index));
 
         setActiveTab(tabs[index]);
     };
@@ -342,9 +311,7 @@ function BottomNav({
         dragStartRef.current = null;
 
         try {
-            drag.target.releasePointerCapture(
-                event.pointerId
-            );
+            drag.target.releasePointerCapture(event.pointerId);
         } catch {
             // Already released.
         }
@@ -357,16 +324,12 @@ function BottomNav({
             didDragRef.current = true;
         }
 
-        const selectedIndex =
-            getTabFromPointer(event.clientX);
-
+        const selectedIndex = getTabFromPointer(event.clientX);
         const selectedTab = tabs[selectedIndex];
 
         setIsDragging(false);
 
-        indicatorRef.current?.style.removeProperty(
-            "--drag-x"
-        );
+        indicatorRef.current?.style.removeProperty("--drag-x");
 
         selectTab(selectedTab);
     };
@@ -388,14 +351,10 @@ function BottomNav({
         setIsDragging(false);
         setActiveTab(drag.startTab);
 
-        indicatorRef.current?.style.removeProperty(
-            "--drag-x"
-        );
+        indicatorRef.current?.style.removeProperty("--drag-x");
 
         try {
-            drag.target.releasePointerCapture(
-                event.pointerId
-            );
+            drag.target.releasePointerCapture(event.pointerId);
         } catch {
             // Already released.
         }
@@ -406,6 +365,7 @@ function BottomNav({
     const handleCategorySelect = (value) => {
         setCategory(value);
         setMoreOpen(false);
+        setSearchOpen(false);
         setActiveTab("home");
     };
 
@@ -417,46 +377,19 @@ function BottomNav({
                 chatOpen ? "bottom-nav-wrapper-hidden" : ""
             }`}
         >
-
-            {/* CATEGORY PANEL */}
+            {/* HORIZONTAL CATEGORY BAR */}
 
             <div
-                className={`
-                    bottom-category-panel
-                    ${
-                        activeTab === "categories"
-                            ? "category-panel-open"
-                            : ""
-                    }
-                `}
+                className={`bottom-category-panel ${
+                    categoryOpen ? "category-panel-open" : ""
+                }`}
+                aria-hidden={!categoryOpen}
             >
-                <div className="bottom-category-header">
-                    <div>
-                        <h3>Categories</h3>
-                        <p>
-                            Browse products by category
-                        </p>
-                    </div>
-
-                    <button
-                        className="bottom-panel-close"
-                        onClick={() => {
-                            setActiveTab("home");
-                        }}
-                        aria-label="Close categories"
-                    >
-                        <X size={20} />
-                    </button>
-                </div>
-
                 <div className="bottom-category-list">
                     <button
-                        className={
-                            category === "all" ? "active" : ""
-                        }
-                        onClick={() =>
-                            handleCategorySelect("all")
-                        }
+                        tabIndex={categoryOpen ? 0 : -1}
+                        className={category === "all" ? "active" : ""}
+                        onClick={() => handleCategorySelect("all")}
                     >
                         All
                     </button>
@@ -464,26 +397,33 @@ function BottomNav({
                     {categories.map((item) => (
                         <button
                             key={item}
+                            tabIndex={categoryOpen ? 0 : -1}
                             className={
                                 category === item ? "active" : ""
                             }
-                            onClick={() =>
-                                handleCategorySelect(item)
-                            }
+                            onClick={() => handleCategorySelect(item)}
                         >
                             {item}
                         </button>
                     ))}
                 </div>
+
+                <button
+                    className="bottom-category-close"
+                    onClick={closeCategories}
+                    tabIndex={categoryOpen ? 0 : -1}
+                    aria-label="Close categories"
+                >
+                    <X size={21} />
+                </button>
             </div>
 
             {/* MORE PANEL */}
 
             <div
-                className={`
-                    bottom-more-panel
-                    ${moreOpen ? "more-panel-open" : ""}
-                `}
+                className={`bottom-more-panel ${
+                    moreOpen ? "more-panel-open" : ""
+                }`}
             >
                 <button
                     onClick={() => {
@@ -515,14 +455,9 @@ function BottomNav({
             {/* SEARCH BAR */}
 
             <div
-                className={`
-                    bottom-search-bar
-                    ${
-                        searchOpen
-                            ? "bottom-search-open"
-                            : ""
-                    }
-                `}
+                className={`bottom-search-bar ${
+                    searchOpen ? "bottom-search-open" : ""
+                }`}
             >
                 <Search size={21} />
 
@@ -531,9 +466,7 @@ function BottomNav({
                     type="text"
                     placeholder="Search products..."
                     value={search}
-                    onChange={(event) =>
-                        setSearch(event.target.value)
-                    }
+                    onChange={(event) => setSearch(event.target.value)}
                 />
 
                 <button
@@ -565,75 +498,61 @@ function BottomNav({
                     }
                 }}
             >
-
-                {/* LIQUID GLASS INDICATOR */}
-
                 <div
                     ref={indicatorRef}
                     className="bottom-nav-indicator"
                     aria-hidden="true"
                 />
 
-                {/* OFFER */}
-
                 <button
                     className={`bottom-nav-item ${
                         activeTab === "offer" ? "active" : ""
                     }`}
-                    onClick={() => handleOffer()}
+                    onClick={handleOffer}
                 >
                     <Tag size={24} />
                     <span>Offer</span>
                 </button>
 
-                {/* CATEGORIES */}
-
                 <button
                     className={`bottom-nav-item ${
                         activeTab === "categories" ? "active" : ""
                     }`}
-                    onClick={() => handleCategories()}
+                    onClick={handleCategories}
                 >
                     <LayoutGrid size={24} />
                     <span>Categories</span>
                 </button>
 
-                {/* HOME */}
-
                 <button
                     className={`bottom-nav-item ${
                         activeTab === "home" ? "active" : ""
                     }`}
-                    onClick={() => handleHome()}
+                    onClick={handleHome}
                 >
                     <HomeIcon size={24} />
                     <span>Home</span>
                 </button>
 
-                {/* SEARCH */}
-
                 <button
                     className={`bottom-nav-item ${
                         activeTab === "search" ? "active" : ""
                     }`}
-                    onClick={() => handleSearch()}
+                    onClick={handleSearch}
                 >
                     <Search size={24} />
                     <span>Search</span>
                 </button>
 
-                {/* MORE */}
-
                 <button
                     className={`bottom-nav-item ${
                         activeTab === "more" ? "active" : ""
                     }`}
-                    onClick={() => handleMore()}
+                    onClick={handleMore}
                 >
                     <MoreHorizontal size={24} />
                     <span>More</span>
                 </button>
-
             </nav>
         </div>
     );
